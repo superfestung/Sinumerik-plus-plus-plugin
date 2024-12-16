@@ -717,6 +717,8 @@ You will get a compiler error if you do.";
             string strHelpDetail = "programming/";
             //string strHelpFileName = "3018717963.html";
 
+            //var ReturnLanguage = new Main;
+            
             string strTest = Npp.editor.GetSelText();
             if (strTest.Length > 0)
             {
@@ -767,6 +769,7 @@ You will get a compiler error if you do.";
                 {
                     if ((SearchLink.Length > 0) & (SearchLink.EndsWith(".html")))
                     {
+                       // Insert here  Getlanguage Functions
                         string strHelpFileName = SearchLink;
                         string strHyperlink = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
                         System.Diagnostics.Process.Start(strHyperlink);
@@ -801,6 +804,7 @@ You will get a compiler error if you do.";
                 MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+       
         #endregion
     }
 }   
