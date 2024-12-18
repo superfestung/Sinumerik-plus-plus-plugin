@@ -132,6 +132,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Sinumerik\Files.cs" />
     <!-- tests -->
     <Compile Include="Tests\Benchmarker.cs" />
     <Compile Include="Tests\SliceTests.cs" />
