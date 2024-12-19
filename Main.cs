@@ -72,42 +72,45 @@ namespace Kbg.NppPluginNET
             //            );
 
             // the "&" before the "D" means that D is an accelerator key for selecting this option 
-            PluginBase.SetCommand(0, "&Documentation", Docs);
+            //PluginBase.SetCommand(0, "&Documentation", Docs);
             // the "&" before the "b" means that B is an accelerator key for selecting this option 
-            PluginBase.SetCommand(1, "A&bout", ShowAboutForm); IdAboutForm = 1;
-            PluginBase.SetCommand(2, "&Settings", OpenSettings);
-            PluginBase.SetCommand(3, "Selection &Remembering Form", OpenSelectionRememberingForm); IdSelectionRememberingForm = 3;
-            PluginBase.SetCommand(4, "Run &tests", TestRunner.RunAll);
+            
+            //PluginBase.SetCommand(3, "Selection &Remembering Form", OpenSelectionRememberingForm); IdSelectionRememberingForm = 3;
+            //PluginBase.SetCommand(4, "Run &tests", TestRunner.RunAll);
 
             // this inserts a separator
-            PluginBase.SetCommand(5, "---", null);
-            PluginBase.SetCommand(6, "Use NanInf class for -inf, inf, nan!!", PrintNanInf);
-            PluginBase.SetCommand(7, "Hello Notepad++", HelloFX);
-            PluginBase.SetCommand(8, "What is Notepad++?", WhatIsNpp);
+            //PluginBase.SetCommand(5, "---", null);
+            //PluginBase.SetCommand(6, "Use NanInf class for -inf, inf, nan!!", PrintNanInf);
+            //PluginBase.SetCommand(7, "Hello Notepad++", HelloFX);
+            //PluginBase.SetCommand(8, "What is Notepad++?", WhatIsNpp);
 
-            PluginBase.SetCommand(9, "---", null);
-            PluginBase.SetCommand(10, "Current &Full Path", InsertCurrentFullFilePath);
-            PluginBase.SetCommand(11, "Current Directory", InsertCurrentDirectory);
+            //PluginBase.SetCommand(9, "---", null);
+            //PluginBase.SetCommand(10, "Current &Full Path", InsertCurrentFullFilePath);
+            //PluginBase.SetCommand(11, "Current Directory", InsertCurrentDirectory);
 
-            PluginBase.SetCommand(12, "---", null);
+            //PluginBase.SetCommand(12, "---", null);
 
-            PluginBase.SetCommand(13, "Close HTML/&XML tag automatically", CheckInsertHtmlCloseTag,
-                new ShortcutKey(true, true, true, Keys.X), // this adds a keyboard shortcut for Ctrl+Alt+Shift+X
-                settings.close_html_tag // this may check the plugin menu item on startup depending on settings
-                ); IdCloseHtmlTag = 13;
+            //PluginBase.SetCommand(13, "Close HTML/&XML tag automatically", CheckInsertHtmlCloseTag,
+            //new ShortcutKey(true, true, true, Keys.X), // this adds a keyboard shortcut for Ctrl+Alt+Shift+X
+            //settings.close_html_tag // this may check the plugin menu item on startup depending on settings
+            //   ); IdCloseHtmlTag = 13;
 
-            PluginBase.SetCommand(14, "---", null);
-            PluginBase.SetCommand(15, "Get File Names Demo", GetFileNamesDemo);
-            PluginBase.SetCommand(16, "Get Session File Names Demo", GetSessionFileNamesDemo);
-            PluginBase.SetCommand(17, "Show files opened and closed this session", ShowFilesOpenedAndClosedThisSession);
-            PluginBase.SetCommand(18, "Save Current Session Demo", SaveCurrentSessionDemo);
-            PluginBase.SetCommand(19, "Print Scroll and Row Information", PrintScrollInformation);
-            PluginBase.SetCommand(20, "Open a pop-up dialog", OpenPopupDialog);
-            PluginBase.SetCommand(21, "---", null);
-            PluginBase.SetCommand(22, "Allocate indicators demo", AllocateIndicatorsDemo);
-            PluginBase.SetCommand(23, "---", null);
-            PluginBase.SetCommand(24, "Read the Online Help", OnlineHelp);
-            PluginBase.SetCommand(25, "G-Code Help", GcodeHelp,new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 25;
+            //PluginBase.SetCommand(14, "---", null);
+            //PluginBase.SetCommand(15, "Get File Names Demo", GetFileNamesDemo);
+            //PluginBase.SetCommand(16, "Get Session File Names Demo", GetSessionFileNamesDemo);
+            //PluginBase.SetCommand(17, "Show files opened and closed this session", ShowFilesOpenedAndClosedThisSession);
+            //PluginBase.SetCommand(18, "Save Current Session Demo", SaveCurrentSessionDemo);
+            //PluginBase.SetCommand(19, "Print Scroll and Row Information", PrintScrollInformation);
+            //PluginBase.SetCommand(20, "Open a pop-up dialog", OpenPopupDialog);
+            //PluginBase.SetCommand(21, "---", null);
+            //PluginBase.SetCommand(22, "Allocate indicators demo", AllocateIndicatorsDemo);
+            
+            PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
+            PluginBase.SetCommand(1, "G-Code Help", GcodeHelp,new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
+            PluginBase.SetCommand(2, "---", null);
+            PluginBase.SetCommand(3, "&Settings", OpenSettings);
+            PluginBase.SetCommand(4, "A&bout", ShowAboutForm); IdAboutForm = 4;
+           
             //PluginBase.SetCommand(26, "Textbox", MakeTextBox);
             //HelpMe
             //PluginBase.SetCommand(27, "Help", HelpMe);
@@ -122,8 +125,8 @@ namespace Kbg.NppPluginNET
             var iconInfo = new (Bitmap bmp, Icon icon, Icon iconDarkMode, int id, char representingChar)[]
             {
                 (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdAboutForm, 'a'),
-                (PluginNetResources.selection_remembering_form_toolbar_bmp, PluginNetResources.selection_remembering_form_toolbar, PluginNetResources.selection_remembering_form_toolbar_darkmode, IdSelectionRememberingForm, 's'),
-                (PluginNetResources.close_html_tag_toolbar_bmp, PluginNetResources.close_html_tag_toolbar, PluginNetResources.close_html_tag_toolbar_darkmode, IdCloseHtmlTag, 'h'),
+                //(PluginNetResources.selection_remembering_form_toolbar_bmp, PluginNetResources.selection_remembering_form_toolbar, PluginNetResources.selection_remembering_form_toolbar_darkmode, IdSelectionRememberingForm, 's'),
+                //(PluginNetResources.close_html_tag_toolbar_bmp, PluginNetResources.close_html_tag_toolbar, PluginNetResources.close_html_tag_toolbar_darkmode, IdCloseHtmlTag, 'h'),
                 (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdGcodeHelpForm, 'a'),
             }
                 .Where(x => iconsToUseChars.IndexOf(x.representingChar) >= 0)
@@ -178,7 +181,7 @@ namespace Kbg.NppPluginNET
                     // This is usually unnecessary, but if there are multiple instances or multiple views,
                     // we need to track which of the currently visible buffers are actually being edited.
                     Npp.editor = new ScintillaGateway(PluginBase.GetCurrentScintilla());
-                    DoesCurrentLexerSupportCloseHtmlTag();
+                    //DoesCurrentLexerSupportCloseHtmlTag();
                     // track when it was opened
                     IntPtr bufferOpenedId = notification.Header.IdFrom;
                     activeFname = Npp.notepad.GetFilePath(bufferOpenedId);
@@ -187,7 +190,7 @@ namespace Kbg.NppPluginNET
                     return;
                 // when the lexer language changed, re-check whether this is a document where we close HTML tags.
                 case (uint)NppMsg.NPPN_LANGCHANGED:
-                    DoesCurrentLexerSupportCloseHtmlTag();
+                    //DoesCurrentLexerSupportCloseHtmlTag();
                     break;
                 // when closing a file
                 case (uint)NppMsg.NPPN_FILEBEFORECLOSE:
@@ -200,7 +203,7 @@ namespace Kbg.NppPluginNET
                     RestyleEverything();
                     return;
                 case (uint)SciMsg.SCN_CHARADDED:
-                    DoInsertHtmlCloseTag(notification.Character);
+                    //DoInsertHtmlCloseTag(notification.Character);
                     break;
                 case (uint)SciMsg.SCN_MODIFIED:
                     modsSinceBufferOpened++;
@@ -721,10 +724,10 @@ You will get a compiler error if you do.";
        
         static void GcodeHelp()
         {
-            //.______________________________________________________________________________.
-            //|----------------------|               |---------------------------------------|
+            //+------------------------------------------------------------------------------+
+            //|----------------------+---------------+---------------------------------------|
             //|----------------------|   To-Do's     |---------------------------------------|
-            //|----------------------|_______________|---------------------------------------|
+            //|----------------------+---------------+---------------------------------------|
             //| - Add variable Search for System Variables                                   |
             //| - Add variable Search for Machine Data                                       |
             //| - Make Pop-Up/Form for showing Help                                          |
