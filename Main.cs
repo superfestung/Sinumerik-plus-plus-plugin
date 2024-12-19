@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using Kbg.NppPluginNET.PluginInfrastructure;
 using NppDemo.Utils;
 using NppDemo.Forms;
-//using NppDemo.Tests;
 using System.Linq;
 using PluginNetResources = NppDemo.Properties.Resources;
 using static Kbg.NppPluginNET.PluginInfrastructure.Win32;
@@ -38,7 +37,6 @@ namespace Kbg.NppPluginNET
         public static readonly string PluginConfigDirectory = Path.Combine(Npp.notepad.GetConfigDirectory(), PluginName);
         public const string PluginRepository = "https://github.com/superfestung/Sinumerik-plus-plus-plugin";
         // general stuff things
-        //static Icon dockingFormIcon = null;
         private static readonly string sessionFilePath = Path.Combine(PluginConfigDirectory, "savedNppSession.xml");
         private static List<(string filepath, DateTime time, bool opened, int modsSinceOpen)> filesOpenedClosed = new List<(string filepath, DateTime time, bool opened, int modsSinceOpen)>();
         public static Settings settings = new Settings();
@@ -46,9 +44,6 @@ namespace Kbg.NppPluginNET
         public static int modsSinceBufferOpened = 0;
         public static string activeFname = null;
         public static bool isDocTypeHTML = false;
-        // indicator things
-        //private static int firstIndicator = -1;
-        //private static int lastIndicator = -1;
         // forms
         public static SelectionRememberingForm selectionRememberingForm = null;
         static internal int IdAboutForm = -1;
@@ -80,8 +75,6 @@ namespace Kbg.NppPluginNET
             PluginBase.SetCommand(4, "A&bout", ShowAboutForm); IdAboutForm = 4;
            
 
-
-
         }
 
         static internal void SetToolBarIcons()
@@ -90,8 +83,6 @@ namespace Kbg.NppPluginNET
             var iconInfo = new (Bitmap bmp, Icon icon, Icon iconDarkMode, int id, char representingChar)[]
             {
                 (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdAboutForm, 'a'),
-                //(PluginNetResources.selection_remembering_form_toolbar_bmp, PluginNetResources.selection_remembering_form_toolbar, PluginNetResources.selection_remembering_form_toolbar_darkmode, IdSelectionRememberingForm, 's'),
-                //(PluginNetResources.close_html_tag_toolbar_bmp, PluginNetResources.close_html_tag_toolbar, PluginNetResources.close_html_tag_toolbar_darkmode, IdCloseHtmlTag, 'h'),
                 (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdGcodeHelpForm, 'a'),
             }
                 .Where(x => iconsToUseChars.IndexOf(x.representingChar) >= 0)
@@ -228,11 +219,7 @@ namespace Kbg.NppPluginNET
                     MessageBoxIcon.Error);
             }
         }
-
-       
-        //static readonly Regex htmlTagNameRegex = new Regex(@"[\._\-:\w]", RegexOptions.Compiled);
-
-        
+      
         //form opening stuff
 
         static void OpenSettings()
@@ -250,68 +237,14 @@ namespace Kbg.NppPluginNET
             if (selectionRememberingForm != null && !selectionRememberingForm.IsDisposed)
                 FormStyle.ApplyStyle(selectionRememberingForm, settings.use_npp_styling);
         }
-/*
-        public static void OpenSelectionRememberingForm()
-        {
-            bool wasVisible = selectionRememberingForm != null && selectionRememberingForm.Visible;
-            if (wasVisible)
-                Npp.notepad.HideDockingForm(selectionRememberingForm);
-            else if (selectionRememberingForm == null || selectionRememberingForm.IsDisposed)
-            {
-                selectionRememberingForm = new SelectionRememberingForm();
-                DisplaySelectionRememberingForm(selectionRememberingForm);
-            }
-            else
-            {
-                Npp.notepad.ShowDockingForm(selectionRememberingForm);
-            }
-        }
 
-        private static void DisplaySelectionRememberingForm(SelectionRememberingForm form)
-        {
-            using (Bitmap newBmp = new Bitmap(16, 16))
-            {
-                Graphics g = Graphics.FromImage(newBmp);
-                ColorMap[] colorMap = new ColorMap[1];
-                colorMap[0] = new ColorMap();
-                colorMap[0].OldColor = Color.Fuchsia;
-                colorMap[0].NewColor = Color.FromKnownColor(KnownColor.ButtonFace);
-                ImageAttributes attr = new ImageAttributes();
-                attr.SetRemapTable(colorMap);
-                //g.DrawImage(tbBmp_tbTab, new Rectangle(0, 0, 16, 16), 0, 0, 16, 16, GraphicsUnit.Pixel, attr);
-                dockingFormIcon = Icon.FromHandle(newBmp.GetHicon());
-            }
-
-            NppTbData _nppTbData = new NppTbData();
-            _nppTbData.hClient = form.Handle;
-            _nppTbData.pszName = form.Text;
-            // the dlgDlg should be the index of funcItem where the current function pointer is in
-            // this case is 15.. so the initial value of funcItem[15]._cmdID - not the updated internal one !
-            _nppTbData.dlgID = IdSelectionRememberingForm;
-            // dock on left
-            _nppTbData.uMask = NppTbMsg.DWS_DF_CONT_LEFT | NppTbMsg.DWS_ICONTAB | NppTbMsg.DWS_ICONBAR;
-            _nppTbData.hIconTab = (uint)dockingFormIcon.Handle;
-            _nppTbData.pszModuleName = PluginName;
-            IntPtr _ptrNppTbData = Marshal.AllocHGlobal(Marshal.SizeOf(_nppTbData));
-            Marshal.StructureToPtr(_nppTbData, _ptrNppTbData, false);
-
-            Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_DMMREGASDCKDLG, 0, _ptrNppTbData);
-            Npp.notepad.ShowDockingForm(form);
-        }
-*/
         static void ShowAboutForm()
         {
             AboutForm aboutForm = new AboutForm();
             aboutForm.ShowDialog();
             aboutForm.Focus();
         }
-        /*
-        static void OpenPopupDialog()
-        {
-            using (var popupForm = new PopupDialog())
-                popupForm.ShowDialog();
-        }
-        */
+
         static void OnlineHelp()
         {
             //Open Online Helpfiles

@@ -132,7 +132,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Sinumerik\Files.cs" />
     <!-- tests -->
     <!-- other utilities -->
     <Compile Include="Utils\FormStyle.cs" />
