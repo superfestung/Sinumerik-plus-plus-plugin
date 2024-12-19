@@ -47,8 +47,8 @@ namespace Kbg.NppPluginNET
         public static string activeFname = null;
         public static bool isDocTypeHTML = false;
         // indicator things
-        private static int firstIndicator = -1;
-        private static int lastIndicator = -1;
+        //private static int firstIndicator = -1;
+        //private static int lastIndicator = -1;
         // forms
         public static SelectionRememberingForm selectionRememberingForm = null;
         static internal int IdAboutForm = -1;
@@ -72,48 +72,13 @@ namespace Kbg.NppPluginNET
             //            );
 
             // the "&" before the "D" means that D is an accelerator key for selecting this option 
-            //PluginBase.SetCommand(0, "&Documentation", Docs);
-            // the "&" before the "b" means that B is an accelerator key for selecting this option 
-            
-            //PluginBase.SetCommand(3, "Selection &Remembering Form", OpenSelectionRememberingForm); IdSelectionRememberingForm = 3;
-            //PluginBase.SetCommand(4, "Run &tests", TestRunner.RunAll);
-
-            // this inserts a separator
-            //PluginBase.SetCommand(5, "---", null);
-            //PluginBase.SetCommand(6, "Use NanInf class for -inf, inf, nan!!", PrintNanInf);
-            //PluginBase.SetCommand(7, "Hello Notepad++", HelloFX);
-            //PluginBase.SetCommand(8, "What is Notepad++?", WhatIsNpp);
-
-            //PluginBase.SetCommand(9, "---", null);
-            //PluginBase.SetCommand(10, "Current &Full Path", InsertCurrentFullFilePath);
-            //PluginBase.SetCommand(11, "Current Directory", InsertCurrentDirectory);
-
-            //PluginBase.SetCommand(12, "---", null);
-
-            //PluginBase.SetCommand(13, "Close HTML/&XML tag automatically", CheckInsertHtmlCloseTag,
-            //new ShortcutKey(true, true, true, Keys.X), // this adds a keyboard shortcut for Ctrl+Alt+Shift+X
-            //settings.close_html_tag // this may check the plugin menu item on startup depending on settings
-            //   ); IdCloseHtmlTag = 13;
-
-            //PluginBase.SetCommand(14, "---", null);
-            //PluginBase.SetCommand(15, "Get File Names Demo", GetFileNamesDemo);
-            //PluginBase.SetCommand(16, "Get Session File Names Demo", GetSessionFileNamesDemo);
-            //PluginBase.SetCommand(17, "Show files opened and closed this session", ShowFilesOpenedAndClosedThisSession);
-            //PluginBase.SetCommand(18, "Save Current Session Demo", SaveCurrentSessionDemo);
-            //PluginBase.SetCommand(19, "Print Scroll and Row Information", PrintScrollInformation);
-            //PluginBase.SetCommand(20, "Open a pop-up dialog", OpenPopupDialog);
-            //PluginBase.SetCommand(21, "---", null);
-            //PluginBase.SetCommand(22, "Allocate indicators demo", AllocateIndicatorsDemo);
-            
+             
             PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
             PluginBase.SetCommand(1, "G-Code Help", GcodeHelp,new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
             PluginBase.SetCommand(2, "---", null);
             PluginBase.SetCommand(3, "&Settings", OpenSettings);
             PluginBase.SetCommand(4, "A&bout", ShowAboutForm); IdAboutForm = 4;
            
-            //PluginBase.SetCommand(26, "Textbox", MakeTextBox);
-            //HelpMe
-            //PluginBase.SetCommand(27, "Help", HelpMe);
 
 
 
@@ -264,367 +229,10 @@ namespace Kbg.NppPluginNET
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        static void PrintScrollInformation()
-        {
-            ScrollInfo scrollInfo = Npp.editor.GetScrollInfo(ScrollInfoMask.SIF_RANGE | ScrollInfoMask.SIF_TRACKPOS | ScrollInfoMask.SIF_PAGE, ScrollInfoBar.SB_VERT);
-            var scrollRatio = (double)scrollInfo.nTrackPos / (scrollInfo.nMax - scrollInfo.nPage);
-            var scrollPercentage = Math.Min(scrollRatio, 1) * 100;
-            Npp.editor.ReplaceSel($@"The maximum row in the current document was {scrollInfo.nMax + 1}.
-A maximum of {scrollInfo.nPage} rows is visible at a time.
-The current scroll ratio is {Math.Round(scrollPercentage, 2)}%.
-");
-        }
+       
+        //static readonly Regex htmlTagNameRegex = new Regex(@"[\._\-:\w]", RegexOptions.Compiled);
 
-        /// <summary>
-        /// open a new file, write a hello world type message, then play with the zoom
-        /// </summary>
-        static void HelloFX()
-        {
-            Npp.notepad.FileNew();
-            Npp.editor.SetText("Hello, Notepad++...from.NET!");
-            var rest = Npp.editor.GetLine(0);
-            Npp.editor.SetText(rest + rest + rest);
-            new Thread(CallbackHelloFX).Start();
-        }
-
-        static void CallbackHelloFX()
-        {
-            int currentZoomLevel = Npp.editor.GetZoom();
-            int i = currentZoomLevel;
-            for (int j = 0; j < 4; j++)
-            {
-                for (; i >= -10; i--)
-                {
-                    Npp.editor.SetZoom(i);
-                    Thread.Sleep(30);
-                }
-                Thread.Sleep(100);
-                for (; i <= 20; i++)
-                {
-                    Thread.Sleep(30);
-                    Npp.editor.SetZoom(i);
-                }
-                Thread.Sleep(100);
-            }
-            for (; i >= currentZoomLevel; i--)
-            {
-                Thread.Sleep(30);
-                Npp.editor.SetZoom(i);
-            }
-        }
-
-        /// <summary>
-        /// open a new buffer and slowly write out the text of text2display in the WhatIsNpp method above.
-        /// </summary>
-        static void WhatIsNpp()
-        {
-            string text2display = "Notepad++ is a free (as in \"free speech\" and also as in \"free beer\") " +
-                "source code editor and Notepad replacement that supports several languages.\n" +
-                "Running in the MS Windows environment, its use is governed by GPL License.\n\n" +
-                "Based on a powerful editing component Scintilla, Notepad++ is written in C++ and " +
-                "uses pure Win32 API and STL which ensures a higher execution speed and smaller program size.\n" +
-                "By optimizing as many routines as possible without losing user friendliness, Notepad++ is trying " +
-                "to reduce the world carbon dioxide emissions. When using less CPU power, the PC can throttle down " +
-                "and reduce power consumption, resulting in a greener environment.";
-            new Thread(new ParameterizedThreadStart(CallbackWhatIsNpp)).Start(text2display);
-        }
-
-        static void CallbackWhatIsNpp(object data)
-        {
-            string text2display = (string)data;
-            Npp.notepad.FileNew();
-            string newFileName = Npp.notepad.GetCurrentFilePath();
-
-            Random srand = new Random(DateTime.Now.Millisecond);
-            int rangeMin = 0;
-            int rangeMax = 250;
-            for (int i = 0; i < text2display.Length; i++)
-            {
-                Thread.Sleep(srand.Next(rangeMin, rangeMax) + 30);
-                if (Npp.notepad.GetCurrentFilePath() != newFileName)
-                    break;
-                Npp.editor.AppendTextAndMoveCursor(text2display[i].ToString());
-            }
-        }
-
-        static void InsertCurrentFullFilePath()
-        {
-            Npp.editor.ReplaceSel(Npp.GetCurrentPath(Npp.PathType.FULL_CURRENT_PATH));
-        }
-
-        static void InsertCurrentDirectory()
-        {
-            Npp.editor.ReplaceSel(Npp.GetCurrentPath(Npp.PathType.DIRECTORY));
-        }
-
-        /// <summary>
-        /// toggle whether or not to autocomplete HTML/XML tags
-        /// </summary>
-        static void CheckInsertHtmlCloseTag()
-        {
-            bool doCloseTag = settings.close_html_tag;
-            PluginBase.CheckMenuItemToggle(IdCloseHtmlTag, ref doCloseTag);
-            settings.close_html_tag = doCloseTag;
-            settings.SaveToIniFile();
-        }
-
-        static internal void DoesCurrentLexerSupportCloseHtmlTag()
-        {
-            LangType docType = LangType.L_TEXT;
-            Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_GETCURRENTLANGTYPE, 0, ref docType);
-            isDocTypeHTML = (docType == LangType.L_HTML || docType == LangType.L_XML || docType == LangType.L_PHP);
-        }
-
-        static readonly Regex htmlTagNameRegex = new Regex(@"[\._\-:\w]", RegexOptions.Compiled);
-
-
-        static internal void DoInsertHtmlCloseTag(char newChar)
-        {
-            if (!(isDocTypeHTML && settings.close_html_tag && newChar == '>'))
-                return;
-
-            int bufCapacity = 512;
-            var pos = Npp.editor.GetCurrentPos();
-            int currentPos = pos;
-            int beginPos = currentPos - (bufCapacity - 1);
-            int startPos = (beginPos > 0) ? beginPos : 0;
-            int size = currentPos - startPos;
-
-            if (size < 3)
-                return;
-
-            using (TextRange tr = new TextRange(startPos, currentPos, bufCapacity))
-            {
-                Npp.editor.GetTextRange(tr);
-                string buf = tr.lpstrText;
-
-                if (buf[size - 2] == '/')
-                    return;
-
-                int pCur = size - 2;
-                while ((pCur > 0) && (buf[pCur] != '<') && (buf[pCur] != '>'))
-                    pCur--;
-
-                if (buf[pCur] == '<')
-                {
-                    pCur++;
-
-                    var insertString = new StringBuilder("</");
-
-                    while (htmlTagNameRegex.IsMatch(buf[pCur].ToString()))
-                    {
-                        insertString.Append(buf[pCur]);
-                        pCur++;
-                    }
-                    insertString.Append('>');
-
-                    if (insertString.Length > 3)
-                    {
-                        Npp.editor.BeginUndoAction();
-                        Npp.editor.ReplaceSel(insertString.ToString());
-                        Npp.editor.SetSel(pos, pos);
-                        Npp.editor.EndUndoAction();
-                    }
-                }
-            }
-        }
-
-        static void GetFileNamesDemo()
-        {
-            int nbFile = (int)Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_GETNBOPENFILES, 0, 0);
-            MessageBox.Show(nbFile.ToString(), "Number of opened files:");
-
-            using (ClikeStringArray cStrArray = new ClikeStringArray(nbFile, Win32.MAX_PATH))
-            {
-                if (Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_GETOPENFILENAMES, cStrArray.NativePointer, nbFile) != IntPtr.Zero)
-                    foreach (string file in cStrArray.ManagedStringsUnicode) MessageBox.Show(file);
-            }
-        }
-        static void GetSessionFileNamesDemo()
-        {
-            if (!Directory.Exists(PluginConfigDirectory) || !File.Exists(sessionFilePath))
-            {
-                MessageBox.Show($"No valid session file at path \"{sessionFilePath}\" in order to point to a valid session file",
-                    "No valid session file",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            int nbFile = (int)Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_GETNBSESSIONFILES, 0, sessionFilePath);
-
-            if (nbFile < 1)
-            {
-                MessageBox.Show($"No valid session file at path \"{sessionFilePath}\" in order to point to a valid session file",
-                    "No valid session file",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            MessageBox.Show($"Number of session files: {nbFile}");
-
-            using (ClikeStringArray cStrArray = new ClikeStringArray(nbFile, Win32.MAX_PATH))
-            {
-                if (Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_GETSESSIONFILES, cStrArray.NativePointer, sessionFilePath) != IntPtr.Zero)
-                    foreach (string file in cStrArray.ManagedStringsUnicode) MessageBox.Show(file);
-            }
-        }
-        static void SaveCurrentSessionDemo()
-        {
-            Npp.CreateConfigSubDirectoryIfNotExists();
-            Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_SAVECURRENTSESSION, 0, sessionFilePath);
-            if (!string.IsNullOrWhiteSpace(sessionFilePath))
-                MessageBox.Show($"Saved Session File to: \"{sessionFilePath}\"",
-                    "saved session file",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        static void PrintNanInf()
-        {
-            bool neginf_correct = double.IsNegativeInfinity(NanInf.neginf);
-            bool inf_correct = double.IsPositiveInfinity(NanInf.inf);
-            bool nan_correct = double.IsNaN(NanInf.nan);
-            string naninf = $@"-infinity == NanInf.neginf: {neginf_correct}
-infinity == NanInf.inf: {inf_correct}
-NaN == NanInf.nan: {nan_correct}
-If you want these constants in your plugin, you can find them in the NanInf class in PluginInfrastructure.
-DO NOT USE double.PositiveInfinity, double.NegativeInfinity, or double.NaN.
-You will get a compiler error if you do.";
-            Npp.notepad.FileNew();
-            Npp.editor.AppendTextAndMoveCursor(naninf);
-        }
-
-        private static void ShowFilesOpenedAndClosedThisSession()
-        {
-            Npp.notepad.FileNew();
-            var sb = new StringBuilder();
-            sb.Append("Action\tFilename\tTime\tModifications since buffer opened\r\n");
-            foreach ((string filename, DateTime time, bool wasOpened, int modsSinceBufferOpened) in filesOpenedClosed)
-            {
-                string formattedTime = time.ToString("yyyy-MM-dd HH:mm:ss");
-                string openClose = wasOpened ? "open" : "close";
-                sb.Append($"{filename}\t{formattedTime}\t{openClose}\t{modsSinceBufferOpened}\r\n");
-            }
-            Npp.editor.SetText(sb.ToString());
-        }
-
-        /// <summary>
-        /// this shows how to allocate indicators (note: this only works in Notepad++ 8.5.6 or newer)<br></br>
-        /// and also provides a very simple example of how to style a region of text with indicators.
-        /// </summary>
-        private static void AllocateIndicatorsDemo()
-        {
-            var dialog = new Form
-            {
-                Text = "Allocate indicators demo",
-                ClientSize = new Size(300, 220),
-                MinimumSize = new Size(300, 220),
-                ShowIcon = false,
-                AutoScaleMode = AutoScaleMode.Font,
-                AutoScaleDimensions = new SizeF(6F, 13F),
-                ShowInTaskbar = false,
-                StartPosition = FormStartPosition.CenterParent,
-                Controls =
-                {
-                    new Label
-                    {
-                        Name = "AllocateIndicatorsTextBoxLabel",
-                        Text = "Choose a positive integer",
-                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                        AutoSize = true,
-                        Location = new Point(60, 50),
-                    },
-                    new TextBox
-                    {
-                        Name = "AllocateIndicatorsTextBox",
-                        Text = "1",
-                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                        Size = new Size(75, 23),
-                        Location = new Point(100, 100)
-                    },
-                    new Button
-                    {
-                        Name = "Ok",
-                        Text = "&Ok",
-                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                        Size = new Size(75, 23),
-                        Location = new Point(50, 160),
-                        UseVisualStyleBackColor = true
-                    },
-                    new Button
-                    {
-                        Name = "Show",
-                        Text = "&Show",
-                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                        Size = new Size(75, 23),
-                        Location = new Point(175, 160),
-                        UseVisualStyleBackColor = true
-                    },
-                }
-            };
-
-            dialog.Controls["Show"].Click += (a, b) => dialog.Close();
-            dialog.Controls["Ok"].Click += (a, b) =>
-            {
-                string allocatorIndicatorsText = dialog.Controls["AllocateIndicatorsTextBox"].Text;
-                bool failure = false;
-                string errorMessage = "Number of indicators must be a positive integer, not " + allocatorIndicatorsText;
-                try
-                {
-                    int numberOfIndicators = int.Parse(allocatorIndicatorsText);
-                    if (numberOfIndicators < 1)
-                        failure = true;
-                    if (Npp.notepad.AllocateIndicators(numberOfIndicators, out int[] indicators))
-                    {
-                        string indicatorsStr = string.Join(", ", indicators.Select(x => x.ToString()).ToArray());
-                        if (indicators.Length > 0)
-                        {
-                            if (firstIndicator == -1)
-                                firstIndicator = indicators[0];
-                            lastIndicator = indicators[indicators.Length - 1];
-                        }
-                        MessageBox.Show($"Was able to allocate the following {numberOfIndicators} indicators: {indicatorsStr}",
-                            $"Successfully allocated {numberOfIndicators} indicators",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        failure = true;
-                        errorMessage = $"Notepad++ failed to find {numberOfIndicators} consecutive unallocated indicators starting at {lastIndicator + 1}, but there was no error";
-                    }
-                }
-                catch
-                {
-                    failure = true;
-                }
-                if (failure)
-                    MessageBox.Show(errorMessage,
-                        "Could not allocate indicators",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-            };
-            dialog.ShowDialog();
-            if (firstIndicator != -1)
-            {
-                string text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                Npp.notepad.FileNew();
-                Npp.editor.SetText(text);
-                for (int ii = firstIndicator; ii <= lastIndicator; ii++)
-                {
-                    Npp.editor.SetIndicatorCurrent(ii);
-                    Npp.editor.IndicSetStyle(ii, IndicatorStyle.SQUIGGLE);
-                    Npp.editor.IndicSetFore(ii, new Colour(0xff, 0, 0));
-                    Npp.editor.IndicatorFillRange(ii, 1);
-                }
-                MessageBox.Show($"Characters {firstIndicator}-{lastIndicator} are styled by indicators {firstIndicator}-{lastIndicator}, which have been allocated by the preceding dialog this session.",
-                    "Showing which indicators are in use",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-
-
-
-        }
-
+        
         //form opening stuff
 
         static void OpenSettings()
@@ -697,12 +305,13 @@ You will get a compiler error if you do.";
             aboutForm.ShowDialog();
             aboutForm.Focus();
         }
-
+        /*
         static void OpenPopupDialog()
         {
             using (var popupForm = new PopupDialog())
                 popupForm.ShowDialog();
         }
+        */
         static void OnlineHelp()
         {
             //Open Online Helpfiles
@@ -813,6 +422,7 @@ You will get a compiler error if you do.";
                 MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);               
             }
         }
+       /*
         static void MakeTextBox()
         {
             string strVariable = "whats going on?";
@@ -832,7 +442,7 @@ You will get a compiler error if you do.";
                 MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-       
+       */
         #endregion
     }
 } 

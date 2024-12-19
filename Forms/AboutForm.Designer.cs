@@ -39,11 +39,11 @@
             // Title
             // 
             this.Title.AutoSize = true;
-            this.Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Title.Location = new System.Drawing.Point(51, 23);
+            this.Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Title.Location = new System.Drawing.Point(20, 9);
             this.Title.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Title.Name = "Title";
-            this.Title.Size = new System.Drawing.Size(215, 17);
+            this.Title.Size = new System.Drawing.Size(281, 24);
             this.Title.TabIndex = 0;
             this.Title.Text = "Sinumerik++ Plugin vX.Y.Z.A";
             this.Title.Click += new System.EventHandler(this.Title_Click);
@@ -66,17 +66,18 @@
             // Description
             // 
             this.Description.AutoSize = true;
-            this.Description.Location = new System.Drawing.Point(34, 63);
+            this.Description.Location = new System.Drawing.Point(21, 43);
             this.Description.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Description.Name = "Description";
-            this.Description.Size = new System.Drawing.Size(245, 13);
+            this.Description.Size = new System.Drawing.Size(233, 13);
             this.Description.TabIndex = 3;
-            this.Description.Text = "The best addon for Sinumerik users for Notepad++";
+            this.Description.Text = "The best Notepad++ addon for Sinumerik users ";
+            this.Description.Click += new System.EventHandler(this.Description_Click);
             // 
             // DebugInfoLabel
             // 
             this.DebugInfoLabel.AutoSize = true;
-            this.DebugInfoLabel.Location = new System.Drawing.Point(34, 100);
+            this.DebugInfoLabel.Location = new System.Drawing.Point(11, 129);
             this.DebugInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DebugInfoLabel.Name = "DebugInfoLabel";
             this.DebugInfoLabel.Size = new System.Drawing.Size(136, 13);
@@ -89,12 +90,12 @@
             this.ThanksWowLinkLabel.AutoSize = true;
             this.ThanksWowLinkLabel.LinkArea = new System.Windows.Forms.LinkArea(228, 234);
             this.ThanksWowLinkLabel.LinkColor = System.Drawing.Color.Black;
-            this.ThanksWowLinkLabel.Location = new System.Drawing.Point(37, 129);
+            this.ThanksWowLinkLabel.Location = new System.Drawing.Point(13, 152);
             this.ThanksWowLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ThanksWowLinkLabel.Name = "ThanksWowLinkLabel";
-            this.ThanksWowLinkLabel.Size = new System.Drawing.Size(210, 17);
+            this.ThanksWowLinkLabel.Size = new System.Drawing.Size(228, 17);
             this.ThanksWowLinkLabel.TabIndex = 5;
-            this.ThanksWowLinkLabel.Text = "Special thanks to Notepad++ Community";
+            this.ThanksWowLinkLabel.Text = "Special thanks to the Notepad++ Community";
             this.ThanksWowLinkLabel.UseCompatibleTextRendering = true;
             this.ThanksWowLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ThanksWowLink_LinkClicked);
             // 

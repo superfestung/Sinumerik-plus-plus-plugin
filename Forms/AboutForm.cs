@@ -51,5 +51,10 @@ namespace NppDemo.Forms
         {
 
         }
+
+        private void Description_Click(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }
