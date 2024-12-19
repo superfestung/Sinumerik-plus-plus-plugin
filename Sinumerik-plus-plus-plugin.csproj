@@ -134,10 +134,6 @@
     </Compile>
     <Compile Include="Sinumerik\Files.cs" />
     <!-- tests -->
-    <Compile Include="Tests\Benchmarker.cs" />
-    <Compile Include="Tests\SliceTests.cs" />
-    <Compile Include="Tests\UserInterfaceTests.cs" />
-    <Compile Include="Tests\TestRunner.cs" />
     <!-- other utilities -->
     <Compile Include="Utils\FormStyle.cs" />
     <Compile Include="Utils\ArrayExtensions.cs" />

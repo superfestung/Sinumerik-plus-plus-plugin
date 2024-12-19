@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using Kbg.NppPluginNET.PluginInfrastructure;
 using NppDemo.Utils;
 using NppDemo.Forms;
-using NppDemo.Tests;
+//using NppDemo.Tests;
 using System.Linq;
 using PluginNetResources = NppDemo.Properties.Resources;
 using static Kbg.NppPluginNET.PluginInfrastructure.Win32;
@@ -38,7 +38,7 @@ namespace Kbg.NppPluginNET
         public static readonly string PluginConfigDirectory = Path.Combine(Npp.notepad.GetConfigDirectory(), PluginName);
         public const string PluginRepository = "https://github.com/superfestung/Sinumerik-plus-plus-plugin";
         // general stuff things
-        static Icon dockingFormIcon = null;
+        //static Icon dockingFormIcon = null;
         private static readonly string sessionFilePath = Path.Combine(PluginConfigDirectory, "savedNppSession.xml");
         private static List<(string filepath, DateTime time, bool opened, int modsSinceOpen)> filesOpenedClosed = new List<(string filepath, DateTime time, bool opened, int modsSinceOpen)>();
         public static Settings settings = new Settings();
@@ -250,7 +250,7 @@ namespace Kbg.NppPluginNET
             if (selectionRememberingForm != null && !selectionRememberingForm.IsDisposed)
                 FormStyle.ApplyStyle(selectionRememberingForm, settings.use_npp_styling);
         }
-
+/*
         public static void OpenSelectionRememberingForm()
         {
             bool wasVisible = selectionRememberingForm != null && selectionRememberingForm.Visible;
@@ -298,7 +298,7 @@ namespace Kbg.NppPluginNET
             Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_DMMREGASDCKDLG, 0, _ptrNppTbData);
             Npp.notepad.ShowDockingForm(form);
         }
-
+*/
         static void ShowAboutForm()
         {
             AboutForm aboutForm = new AboutForm();
