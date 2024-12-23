@@ -123,6 +123,46 @@ namespace NppDemo.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
+        public static System.Drawing.Icon magnifier_V2 {
+            get {
+                object obj = ResourceManager.GetObject("magnifier_V2", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap magnifier_V2_bmp {
+            get {
+                object obj = ResourceManager.GetObject("magnifier_V2_bmp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
+        public static System.Drawing.Icon nc_search {
+            get {
+                object obj = ResourceManager.GetObject("nc_search", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap nc_search_bmp {
+            get {
+                object obj = ResourceManager.GetObject("nc_search_bmp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
+        /// </summary>
         public static System.Drawing.Icon selection_remembering_form_toolbar {
             get {
                 object obj = ResourceManager.GetObject("selection_remembering_form_toolbar", resourceCulture);

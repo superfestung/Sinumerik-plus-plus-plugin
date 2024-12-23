@@ -28,19 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.PictureBox pictureBox1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.Title = new System.Windows.Forms.Label();
             this.GitHubLink = new System.Windows.Forms.LinkLabel();
             this.Description = new System.Windows.Forms.Label();
             this.DebugInfoLabel = new System.Windows.Forms.Label();
-            this.ThanksWowLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.Donate = new System.Windows.Forms.Button();
+            this.YouTube = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            pictureBox1.Location = new System.Drawing.Point(158, 37);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(200, 200);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            pictureBox1.TabIndex = 6;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // Title
             // 
             this.Title.AutoSize = true;
             this.Title.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Title.Location = new System.Drawing.Point(20, 9);
+            this.Title.Location = new System.Drawing.Point(13, 7);
             this.Title.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(281, 24);
@@ -52,7 +69,7 @@
             // 
             this.GitHubLink.AutoSize = true;
             this.GitHubLink.LinkArea = new System.Windows.Forms.LinkArea(26, 58);
-            this.GitHubLink.Location = new System.Drawing.Point(13, 178);
+            this.GitHubLink.Location = new System.Drawing.Point(10, 218);
             this.GitHubLink.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.GitHubLink.Name = "GitHubLink";
             this.GitHubLink.Size = new System.Drawing.Size(299, 42);
@@ -66,45 +83,64 @@
             // Description
             // 
             this.Description.AutoSize = true;
-            this.Description.Location = new System.Drawing.Point(21, 43);
+            this.Description.Location = new System.Drawing.Point(15, 46);
             this.Description.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Description.Name = "Description";
-            this.Description.Size = new System.Drawing.Size(233, 13);
+            this.Description.Size = new System.Drawing.Size(138, 26);
             this.Description.TabIndex = 3;
-            this.Description.Text = "The best Notepad++ addon for Sinumerik users ";
+            this.Description.Text = "The best Notepad++ addon\r\nfor Sinumerik users ";
             this.Description.Click += new System.EventHandler(this.Description_Click);
             // 
             // DebugInfoLabel
             // 
             this.DebugInfoLabel.AutoSize = true;
-            this.DebugInfoLabel.Location = new System.Drawing.Point(11, 129);
+            this.DebugInfoLabel.Location = new System.Drawing.Point(15, 87);
             this.DebugInfoLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DebugInfoLabel.Name = "DebugInfoLabel";
-            this.DebugInfoLabel.Size = new System.Drawing.Size(136, 13);
+            this.DebugInfoLabel.Size = new System.Drawing.Size(81, 26);
             this.DebugInfoLabel.TabIndex = 4;
-            this.DebugInfoLabel.Text = "Notepad++ version: X.Y.Z. ";
+            this.DebugInfoLabel.Text = "Notepad++\r\nVersion: X.Y.Z. ";
             this.DebugInfoLabel.Click += new System.EventHandler(this.DebugInfoLabel_Click);
             // 
-            // ThanksWowLinkLabel
+            // Donate
             // 
-            this.ThanksWowLinkLabel.AutoSize = true;
-            this.ThanksWowLinkLabel.LinkArea = new System.Windows.Forms.LinkArea(228, 234);
-            this.ThanksWowLinkLabel.LinkColor = System.Drawing.Color.Black;
-            this.ThanksWowLinkLabel.Location = new System.Drawing.Point(13, 152);
-            this.ThanksWowLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.ThanksWowLinkLabel.Name = "ThanksWowLinkLabel";
-            this.ThanksWowLinkLabel.Size = new System.Drawing.Size(228, 17);
-            this.ThanksWowLinkLabel.TabIndex = 5;
-            this.ThanksWowLinkLabel.Text = "Special thanks to the Notepad++ Community";
-            this.ThanksWowLinkLabel.UseCompatibleTextRendering = true;
-            this.ThanksWowLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ThanksWowLink_LinkClicked);
+            this.Donate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Donate.Location = new System.Drawing.Point(14, 178);
+            this.Donate.Name = "Donate";
+            this.Donate.Size = new System.Drawing.Size(60, 27);
+            this.Donate.TabIndex = 7;
+            this.Donate.Text = "Donate";
+            this.Donate.UseVisualStyleBackColor = true;
+            this.Donate.Click += new System.EventHandler(this.donate_ButtonClick);
+            // 
+            // YouTube
+            // 
+            this.YouTube.Location = new System.Drawing.Point(80, 178);
+            this.YouTube.Name = "YouTube";
+            this.YouTube.Size = new System.Drawing.Size(60, 27);
+            this.YouTube.TabIndex = 8;
+            this.YouTube.Text = "YouTube";
+            this.YouTube.UseVisualStyleBackColor = true;
+            this.YouTube.Click += new System.EventHandler(this.youtube_ButtonClick);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 151);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(121, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Learn more and Support";
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(323, 238);
-            this.Controls.Add(this.ThanksWowLinkLabel);
+            this.ClientSize = new System.Drawing.Size(363, 268);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.YouTube);
+            this.Controls.Add(this.Donate);
+            this.Controls.Add(pictureBox1);
             this.Controls.Add(this.DebugInfoLabel);
             this.Controls.Add(this.Description);
             this.Controls.Add(this.GitHubLink);
@@ -113,6 +149,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AboutForm";
             this.Text = "About Sinumerik++ Plugin";
+            ((System.ComponentModel.ISupportInitialize)(pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -124,6 +161,8 @@
         private System.Windows.Forms.LinkLabel GitHubLink;
         private System.Windows.Forms.Label Description;
         private System.Windows.Forms.Label DebugInfoLabel;
-        private System.Windows.Forms.LinkLabel ThanksWowLinkLabel;
+        public System.Windows.Forms.Button Donate;
+        private System.Windows.Forms.Button YouTube;
+        private System.Windows.Forms.Label label1;
     }
 }

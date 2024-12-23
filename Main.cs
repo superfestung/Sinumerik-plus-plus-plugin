@@ -3,28 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-using Kbg.NppPluginNET.PluginInfrastructure;
-using NppDemo.Utils;
-using NppDemo.Forms;
+using System.IO;
 using System.Linq;
-using PluginNetResources = NppDemo.Properties.Resources;
-using static Kbg.NppPluginNET.PluginInfrastructure.Win32;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 //using static Kbg.NppPluginNET.PluginInfrastructure.ScintillaGateway;
 //For XML Parsing, added by Superfestung, not sure if nessecarry
 using System.Xml;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Text;
-using System.IO;
-using System.Net.NetworkInformation;
-using System.Drawing.Drawing2D;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.Net;
-using System.Threading.Tasks;
-using System.Security.Permissions;
+using Kbg.NppPluginNET;
+using Kbg.NppPluginNET.PluginInfrastructure;
+using NppDemo.Forms;
+using NppDemo.Utils;
+using PluginNetResources = NppDemo.Properties.Resources;
+
 
 
 namespace Kbg.NppPluginNET
@@ -37,6 +31,7 @@ namespace Kbg.NppPluginNET
         public static readonly string PluginConfigDirectory = Path.Combine(Npp.notepad.GetConfigDirectory(), PluginName);
         public const string PluginRepository = "https://github.com/superfestung/Sinumerik-plus-plus-plugin";
         // general stuff things
+        static Icon dockingFormIcon = null;
         private static readonly string sessionFilePath = Path.Combine(PluginConfigDirectory, "savedNppSession.xml");
         private static List<(string filepath, DateTime time, bool opened, int modsSinceOpen)> filesOpenedClosed = new List<(string filepath, DateTime time, bool opened, int modsSinceOpen)>();
         public static Settings settings = new Settings();
@@ -46,6 +41,7 @@ namespace Kbg.NppPluginNET
         public static bool isDocTypeHTML = false;
         // forms
         public static SelectionRememberingForm selectionRememberingForm = null;
+        public static HelpScreen helpScreen = null;//new HelpScreen();
         static internal int IdAboutForm = -1;
         static internal int IdSelectionRememberingForm = -1;
         static internal int IdCloseHtmlTag = -1;
@@ -67,13 +63,13 @@ namespace Kbg.NppPluginNET
             //            );
 
             // the "&" before the "D" means that D is an accelerator key for selecting this option 
-             
+
             PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
-            PluginBase.SetCommand(1, "G-Code Help", GcodeHelp,new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
+            PluginBase.SetCommand(1, "G-Code Help", GcodeHelp, new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
             PluginBase.SetCommand(2, "---", null);
             PluginBase.SetCommand(3, "&Settings", OpenSettings);
-            PluginBase.SetCommand(4, "A&bout", ShowAboutForm); IdAboutForm = 4;
-           
+            PluginBase.SetCommand(4, "A&bout", ShowAboutForm); //IdAboutForm = 4;
+
 
         }
 
@@ -82,8 +78,8 @@ namespace Kbg.NppPluginNET
             string iconsToUseChars = settings.toolbar_icons.ToLower();
             var iconInfo = new (Bitmap bmp, Icon icon, Icon iconDarkMode, int id, char representingChar)[]
             {
-                (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdAboutForm, 'a'),
-                (PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdGcodeHelpForm, 'a'),
+                //(PluginNetResources.about_form_toolbar_bmp, PluginNetResources.about_form_toolbar, PluginNetResources.about_form_toolbar_darkmode, IdAboutForm, 'a'),
+                (PluginNetResources.magnifier_V2_bmp, PluginNetResources.magnifier_V2, PluginNetResources.magnifier_V2, IdGcodeHelpForm, 'a'),
             }
                 .Where(x => iconsToUseChars.IndexOf(x.representingChar) >= 0)
                 .OrderBy(x => iconsToUseChars.IndexOf(x.representingChar));
@@ -192,6 +188,12 @@ namespace Kbg.NppPluginNET
                 selectionRememberingForm.Close();
                 selectionRememberingForm.Dispose();
             }
+            //helpScreen formcopied from selectionRememberingForm
+            if (helpScreen != null && !helpScreen.IsDisposed)
+            {
+                helpScreen.Close();
+                helpScreen.Dispose();
+            }
         }
         #endregion
 
@@ -219,7 +221,7 @@ namespace Kbg.NppPluginNET
                     MessageBoxIcon.Error);
             }
         }
-      
+
         //form opening stuff
 
         static void OpenSettings()
@@ -236,6 +238,10 @@ namespace Kbg.NppPluginNET
         {
             if (selectionRememberingForm != null && !selectionRememberingForm.IsDisposed)
                 FormStyle.ApplyStyle(selectionRememberingForm, settings.use_npp_styling);
+            //helpScreen
+            if (helpScreen != null && !helpScreen.IsDisposed)
+                FormStyle.ApplyStyle(helpScreen, settings.use_npp_styling);
+
         }
 
         static void ShowAboutForm()
@@ -249,21 +255,70 @@ namespace Kbg.NppPluginNET
         {
             //Open Online Helpfiles
             //VariableHelp
-            string strPluginPath = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+            string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
             string strHelpPath = "siemens/sinumerik/hmi/hlps/";
             string strHelpEngPath = "hlp_eng/eng/";
             string strHelpDetail = "programming/";
             string strHelpFileName = "3018717963.html";
 
+            HelpScreen.HandOverURL = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
+            OpenBrowser();
 
-            strHelpEngPath = Addons.LanguageFolder();
-            //string strHyperlink = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/hlps/hlp_eng/eng/programming/3018717963.html";
-            string strHyperlink = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
+        }
+        public static void OpenBrowser()
+        {
 
-            System.Diagnostics.Process.Start(strHyperlink);
+
+            bool wasVisible = helpScreen != null && helpScreen.Visible;
+            if (wasVisible)
+
+                helpScreen.RefreshBrowser(HelpScreen.HandOverURL);
+
+            //Npp.notepad.HideDockingForm(helpScreen);
+            else if (helpScreen == null || helpScreen.IsDisposed)
+            {
+                helpScreen = new HelpScreen();
+                DisplayHelpScreenForm(helpScreen);
+            }
+            else
+            {
+                Npp.notepad.ShowDockingForm(helpScreen);
+            }
+            helpScreen.RefreshBrowser(HelpScreen.HandOverURL);
         }
 
-       
+        private static void DisplayHelpScreenForm(HelpScreen form)
+        {
+            using (Bitmap newBmp = new Bitmap(16, 16))
+            {
+                Graphics g = Graphics.FromImage(newBmp);
+                ColorMap[] colorMap = new ColorMap[1];
+                colorMap[0] = new ColorMap();
+                colorMap[0].OldColor = Color.Fuchsia;
+                colorMap[0].NewColor = Color.FromKnownColor(KnownColor.ButtonFace);
+                ImageAttributes attr = new ImageAttributes();
+                attr.SetRemapTable(colorMap);
+                //g.DrawImage(tbBmp_tbTab, new Rectangle(0, 0, 16, 16), 0, 0, 16, 16, GraphicsUnit.Pixel, attr);
+                dockingFormIcon = Icon.FromHandle(newBmp.GetHicon());
+            }
+
+            NppTbData _nppTbData = new NppTbData();
+            _nppTbData.hClient = form.Handle;
+            _nppTbData.pszName = form.Text;
+            // the dlgDlg should be the index of funcItem where the current function pointer is in
+            // this case is 15.. so the initial value of funcItem[15]._cmdID - not the updated internal one !
+            _nppTbData.dlgID = IdSelectionRememberingForm;
+            // dock on left
+            _nppTbData.uMask = NppTbMsg.DWS_DF_CONT_LEFT | NppTbMsg.DWS_ICONTAB | NppTbMsg.DWS_ICONBAR;
+            _nppTbData.hIconTab = (uint)dockingFormIcon.Handle;
+            _nppTbData.pszModuleName = PluginName;
+            IntPtr _ptrNppTbData = Marshal.AllocHGlobal(Marshal.SizeOf(_nppTbData));
+            Marshal.StructureToPtr(_nppTbData, _ptrNppTbData, false);
+
+            Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_DMMREGASDCKDLG, 0, _ptrNppTbData);
+            Npp.notepad.ShowDockingForm(form);
+        }
+
         static void GcodeHelp()
         {
             //+------------------------------------------------------------------------------+
@@ -277,113 +332,109 @@ namespace Kbg.NppPluginNET
             //|______________________________________________________________________________|
 
             //VariableHelp
-            string strPluginPath = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
-            string strHelpPath = "siemens/sinumerik/hmi/hlps/";
-            string strHelpEngPath = "hlp_eng/eng/";
-            string strHelpDetail = "programming/";
+            //string strPluginPath = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+            //string strHelpPath = "siemens/sinumerik/hmi/hlps/";
+            //string strHelpEngPath = "hlp_eng/eng/";
+            //string strHelpDetail = "programming/";
             //string strHelpFileName = "3018717963.html";
 
             //
-            
-            strHelpEngPath = Addons.LanguageFolder(); 
-                  
-            
 
-            string strTest = Npp.editor.GetSelText();
-            if (strTest.Length > 0)
-            {
-                bool getHTML = false;
-                string SearchValue = ""; 
-                string SearchLink = "";
+            //strHelpEngPath = ReadFiles.LanguageFolder(); 
 
-                //Creates an XML Reader for the G-Code Help
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.DtdProcessing = DtdProcessing.Parse;
-            
-                XmlReader readerGcodeHelp = XmlReader.Create("C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",settings);
-                readerGcodeHelp.MoveToContent();
+            ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText(),
+                "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
+                "FUNCTION");
+            readFiles.GetHTMLFile();
+            //string SearchText = Npp.editor.GetSelText();
+            //string XmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml";
+            //string XmlElementName = "FUNCTION";
+            //HelpScreen.HandOverURL = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
 
-                while (readerGcodeHelp.Read())
-                {
-                    switch (readerGcodeHelp.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                        
-                            if (readerGcodeHelp.Name == "FUNCTION")
-                            {
-                                if (readerGcodeHelp.AttributeCount > 0 )
-                                {
-                                    readerGcodeHelp.MoveToNextAttribute();
-                                    if (readerGcodeHelp.Value == strTest)
-                                    {
-                                        getHTML = true;
-                                        SearchValue = readerGcodeHelp.Value;                               
-                                    }
-                                }
-                            }
-                            break;
-                        case XmlNodeType.Text:
-                            if (getHTML)
-                            {
-                                SearchLink = readerGcodeHelp.Value;
-                                getHTML = false;
-                            }
-                            break;
-                    }
-                }            
-                if (SearchValue.Length == 0)
-                {
-                    MessageBox.Show($"Search for <{strTest}> has no Results!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    if ((SearchLink.Length > 0) & (SearchLink.EndsWith(".html")))
-                    {
-                       // Insert here  Getlanguage Functions
-                        string strHelpFileName = SearchLink;
-                        string strHyperlink = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
-                        System.Diagnostics.Process.Start(strHyperlink);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Search Result for <{strTest}> is not a valid HTML-Help!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }                
-            }
-            else
-            {
-                MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);               
-            }
-        }
-       /*
-        static void MakeTextBox()
-        {
-            string strVariable = "whats going on?";
-            MessageBox.Show(strVariable, "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //OpenBrowser();
 
         }
 
-        static void HelpMe()
-        {
-            string strTest = Npp.editor.GetSelText();
-            if (strTest.Length > 0)
-            {
-                MessageBox.Show(strTest, "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-       */
+
+
         #endregion
     }
-} 
+}
 
-class Addons
+class ReadFiles
 {
-     
-    public static String LanguageFolder()
+
+    //string SearchText = Npp.editor.GetSelText();
+    //string XmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml";
+    //string XmlElementName = "FUNCTION";
+
+    string searchText;
+    string xmlSourceFile;
+    string xmlElementName;
+
+    //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
+    string[] XmlVariableSources = { "slhlpgcode.xml",
+                                    "sinumerik_md_axis.xml",
+                                    "sinumerik_md_chan.xml",
+                                    "sinumerik_md_compile.xml",
+                                    "sinumerik_md_hmi.xml",
+                                    "sinumerik_md_nck.xml",
+                                    "sinumerik_md_set.xml",
+                                    "sinumerik_btss_a.xml",
+                                    "sinumerik_btss_b.xml",
+                                    "sinumerik_btss_c.xml",
+                                    "sinumerik_btss_m.xml",
+                                    "sinumerik_btss_n.xml",
+                                    "sinumerik_btss_t.xml"};
+
+    string[] XmlFileFolder =    { "/siemens/sinumerik/hmi/cfg/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
+                                    "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/"};
+
+    string XmlRootFolder =    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin" ;
+
+    string[] XmlSearchElement = { "FUNCTION", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY" };
+    int[] XmlTargetAttribute = { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+    string[] XmlWhereIsHTML = { "txt", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1", "atr1" };
+
+
+
+    public string Searchtext
+    {
+        get { return this.searchText; }
+        //set { this.searchText = value; }
+    }
+
+    public string XmlSourceFile
+    {
+        get { return this.xmlSourceFile; }
+        //set { this.xmlSourceFile = value; }
+    }
+
+    public string XmlElementName
+    {
+        get { return this.xmlElementName; }
+        //set { this.xmlElementName = value; }
+    }
+
+    public ReadFiles(string searchText, string xmlSourceFile, string xmlElementName)
+    {
+        this.searchText = searchText;
+        this.xmlSourceFile = xmlSourceFile;
+        this.xmlElementName = xmlElementName;
+    }
+
+    private static String LanguageFolder()
     {
         string strHelpLangPath = "";
         switch (GetLanguage())
@@ -401,7 +452,7 @@ class Addons
         return strHelpLangPath;
     }
 
-    static String GetLanguage()
+    private static String GetLanguage()
     {
         String result = "";
         StringBuilder sbIniFilePath = new StringBuilder(Win32.MAX_PATH);
@@ -455,4 +506,162 @@ class Addons
         return result;
     }
 
+    public void GetHTMLFile()
+    {
+
+        if (this.searchText.Length > 0)
+        {
+            string SearchResultLink = "";
+            int CheckIndex = 0;
+            //Creates an XML Reader for the G-Code Help
+
+            //MessageBox.Show($"Search Text:<{this.searchText}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            for (int i = 0; i <=  XmlVariableSources.Length ; i++)
+            {
+                CheckIndex = i;
+                //MessageBox.Show($"XmlRootFolder: <{XmlRootFolder}> XmlFileFolder[{i}] : <{XmlFileFolder[i]}> XmlVariableSources[{i}]: <{XmlVariableSources[i]}> XmlSearchElement[{i}]: <{XmlSearchElement[i]}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SearchResultLink = readXmlFile( this.XmlRootFolder + this.XmlFileFolder[i] + this.XmlVariableSources[i], this.XmlSearchElement[i],  this.searchText);
+                if ((SearchResultLink.Length > 0) && (SearchResultLink.EndsWith(".html")))
+                {
+                    break;
+                }
+
+            }
+            MessageBox.Show($"Search Result Link:<{SearchResultLink}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (SearchResultLink.Length == 0)
+            {
+                MessageBox.Show($"Search for <{this.searchText}> has no Results!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
+                {
+                    ExecuteHtml(SearchResultLink);
+                }
+                else
+                {
+                    MessageBox.Show($"Search Result for <{this.searchText}> is not a valid HTML-Help!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+        else
+        {
+            MessageBox.Show("No Characters selected!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+    }
+    
+    static string readXmlFile(string xmlSourceFile, string xmlElementName, string searchText)
+    {
+        //string result = "";
+        bool getHTML = false;
+        string SearchResultValue = "";
+        string SearchResultLink = "";
+        //Creates an XML Reader for the G-Code Help
+       
+        XmlReaderSettings settings = new XmlReaderSettings();
+        settings.DtdProcessing = DtdProcessing.Parse;
+        XmlReader readerXmlFile = XmlReader.Create(xmlSourceFile, settings);
+        readerXmlFile.MoveToContent();
+        while (readerXmlFile.Read())
+        {
+            switch (readerXmlFile.NodeType)
+            {
+                case XmlNodeType.Element:
+                    if (readerXmlFile.Name == xmlElementName)
+                    {
+                        if (readerXmlFile.AttributeCount > 0)
+                        {
+                            readerXmlFile.MoveToNextAttribute();
+                            if (readerXmlFile.Value == searchText)
+                            {
+                                getHTML = true;
+                                SearchResultValue = readerXmlFile.Value;
+                            }
+                        }
+                    }
+                    break;
+                case XmlNodeType.Text:
+                    if (getHTML)
+                    {
+                        SearchResultLink = readerXmlFile.Value;
+                        getHTML = false;
+                        goto Finish;
+                    }
+                    break;
+            }
+        }
+        Finish:
+        return SearchResultLink;
+    }
+
+    public void GetSearchVariableFromText()
+    {
+        //-----------------------------------------------------------------------
+        //Check if variable is G-Code
+        //"card\siemens\sinumerik\hmi\cfg\slhlpgcode.xml"
+
+        //-----------------------------------------------------------------------
+        // Check if Systemvariable or BTSS
+        //Check Textfile from Sinumerik ONE
+        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvcONE.txt"
+
+        //Check Textfile from Sinumerik 840Dsl, start at line of ONE End
+        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvc840.txt"
+
+        //Check Textfile from SInumerik 828D, start at line of ONE End
+        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvc828.txt"
+
+        //If variable found, get coresponding BTSS Variable
+
+        //Search BTSS Variable in the XML Files, Get HTML File
+
+        //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
+        //"sinumerik_btss_a.xml"
+        //"sinumerik_btss_b.xml"
+        //"sinumerik_btss_c.xml"
+        //"sinumerik_btss_m.xml"
+        //"sinumerik_btss_n.xml"
+        //"sinumerik_btss_t.xml"
+
+
+        //-----------------------------------------------------------------------
+        // Check if Machine Data exists
+        //"card\siemens\sinumerik\hmi\cfg\mdreference.xml"
+
+        //Search for MD Number in XML Files:
+        //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
+        //"sinumerik_md_axis.xml"
+        //"sinumerik_md_chan.xml"
+        //"sinumerik_md_compile.xml"
+        //"sinumerik_md_hmi.xml"
+        //"sinumerik_md_nck.xml"
+        //"sinumerik_md_set.xml"
+
+        for (int i = 0; XmlVariableSources.Length <= i; i++)
+        {
+            xmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/" + "siemens/sinumerik/hmi/hlps/hlp_eng/eng/" + XmlVariableSources[i];
+
+        }
+
+    }
+
+
+    private void ExecuteHtml(string executeHtml)
+    {
+        string LanguageFolder = ReadFiles.LanguageFolder();
+        string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+        string strHelpPath = "siemens/sinumerik/hmi/hlps/";
+        string strHelpDetail = "programming/";
+
+        string strHyperlink = strPluginPath + strHelpPath + LanguageFolder + strHelpDetail + executeHtml;
+        HelpScreen.HandOverURL = strPluginPath + strHelpPath + LanguageFolder + strHelpDetail + executeHtml;
+        //System.Diagnostics.Process.Start(strHyperlink);
+        //Main main = new Main();
+        Main.OpenBrowser();
+        //; Main.
+    }
+
 }
+
+

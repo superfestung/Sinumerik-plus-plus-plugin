@@ -77,6 +77,18 @@
   </ItemGroup>
   <ItemGroup>
     <!-- forms -->
+    <Compile Include="Forms\CodeGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CodeGenerator.Designer.cs">
+      <DependentUpon>CodeGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HelpScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HelpScreen.Designer.cs">
+      <DependentUpon>HelpScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NppFormHelper.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -127,7 +139,7 @@
     <!-- other code -->
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources1.Designer.cs">
+    <Compile Include="Properties\Resources3.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -156,6 +168,12 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CodeGenerator.resx">
+      <DependentUpon>CodeGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HelpScreen.resx">
+      <DependentUpon>HelpScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PopupDialog.resx">
       <DependentUpon>PopupDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,12 +186,17 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources3.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <!-- icons and such -->
     <Content Include="Properties\star_bmp.bmp" />
+    <None Include="Resources\magnifier_V2.ico" />
+    <None Include="Resources\magnifier_V2 bmp.bmp" />
+    <None Include="Resources\nc_search_bmp.bmp" />
+    <None Include="Resources\nc_search_bmp.ico" />
+    <None Include="Resources\nc_search.ico" />
     <None Include="Resources\close html tag toolbar darkmode.ico" />
     <None Include="Resources\close html tag toolbar.ico" />
     <None Include="Resources\close html tag toolbar bmp.bmp" />

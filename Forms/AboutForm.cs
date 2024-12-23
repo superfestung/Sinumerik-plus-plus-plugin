@@ -11,7 +11,7 @@ namespace NppDemo.Forms
             InitializeComponent();
             NppFormHelper.RegisterFormIfModeless(this, true);
             FormStyle.ApplyStyle(this, Main.settings.use_npp_styling);
-            ThanksWowLinkLabel.LinkColor = ThanksWowLinkLabel.ForeColor; // hidden!
+            //ThanksWowLinkLabel.LinkColor = ThanksWowLinkLabel.ForeColor; // hidden!
             Title.Text = Title.Text.Replace("X.Y.Z.A", Npp.AssemblyVersionString());
             DebugInfoLabel.Text = DebugInfoLabel.Text.Replace("X.Y.Z", Npp.nppVersionStr);
         }
@@ -56,5 +56,22 @@ namespace NppDemo.Forms
         {
 
         }
+
+        private void pictureBox1_Click(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void donate_ButtonClick(object sender, System.EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/paypalme/stubitroll");
+        }
+
+        private void youtube_ButtonClick(object sender, System.EventArgs e)
+        {
+            //
+            System.Diagnostics.Process.Start("https://www.youtube.com/@Superfestung");
+        }
+
     }
 }

@@ -3,11 +3,14 @@
 magick "selection remembering form icon.png" -resize 20x20 "selection remembering form toolbar bmp.bmp"
 magick "about form icon.png" -resize 20x20 "about form toolbar bmp.bmp"
 magick "close html tag icon.png" -resize 20x20 "close html tag toolbar bmp.bmp"
+magick "magnifier_V2.png" -resize 16x16 "magnifier_V2 bmp.bmp"
 
 : add toolbar icons
 magick "selection remembering form icon.png" -resize 20x20 "selection remembering form toolbar.ico"
 magick "about form icon.png" -resize 20x20 "about form toolbar.ico"
 magick "close html tag icon.png" -resize 20x20 "close html tag toolbar.ico"
+magick "magnifier_V2.png" -resize 16x16 "magnifier_V2.ico"
+
 
 : add darkmode icons
 magick "selection remembering form icon darkmode.png" -resize 20x20 "selection remembering form toolbar darkmode.ico"
