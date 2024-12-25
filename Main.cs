@@ -39,6 +39,8 @@ namespace Kbg.NppPluginNET
         public static int modsSinceBufferOpened = 0;
         public static string activeFname = null;
         public static bool isDocTypeHTML = false;
+        public static bool autoSearchActive = false;
+        public static string previousSelection = "";
         // forms
         public static SelectionRememberingForm selectionRememberingForm = null;
         public static HelpScreen helpScreen = null;//new HelpScreen();
@@ -67,7 +69,8 @@ namespace Kbg.NppPluginNET
             PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
             PluginBase.SetCommand(1, "G-Code Help", GcodeHelp, new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
             PluginBase.SetCommand(2, "---", null);
-            PluginBase.SetCommand(3, "&Settings", OpenSettings);
+            //PluginBase.SetCommand(3, "&Settings", OpenSettings);
+            PluginBase.SetCommand(3, "Auto Search", EnableAutoSearch); //IdAboutForm = 4;
             PluginBase.SetCommand(4, "A&bout", ShowAboutForm); //IdAboutForm = 4;
 
 
@@ -172,11 +175,28 @@ namespace Kbg.NppPluginNET
                     if (bufferModified == activeFname)
                         modsSinceBufferOpened++;
                     break;
-                    //if (code > int.MaxValue) // windows messages
-                    //{
-                    //    int wm = -(int)code;
-                    //    }
-                    //}
+                //if (code > int.MaxValue) // windows messages
+                //{
+                //    int wm = -(int)code;
+                //    }
+                //}
+                case (uint)SciMsg.SCN_DOUBLECLICK:
+                    //case (uint)SciMsg.SCI_GETSELECTIONNSTART:
+                    //case (uint)SciMsg.SCI_GETSELTEXT:
+                    //MessageBox.Show($"SCN_DOUBLECLICK: ", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (autoSearchActive)
+                    {
+                        string searchText = Npp.editor.GetSelText();
+                        if ((searchText.Length > 0) &! (previousSelection == searchText))
+                        {
+                            //MessageBox.Show($"Search Text:<{searchText}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            ReadFiles readFiles = new ReadFiles(searchText);
+                            readFiles.GetHTMLFile();
+                            previousSelection = searchText;
+                        }
+                    }
+                    break;
+
             }
         }
 
@@ -242,6 +262,21 @@ namespace Kbg.NppPluginNET
             if (helpScreen != null && !helpScreen.IsDisposed)
                 FormStyle.ApplyStyle(helpScreen, settings.use_npp_styling);
 
+        }
+
+        static void EnableAutoSearch()
+        {
+            if (autoSearchActive)
+            {
+                autoSearchActive = false;
+                MessageBox.Show($"Automatic Search Modus is off!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                autoSearchActive = true;
+                MessageBox.Show($"Automatic Search Modus is active!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
         }
 
         static void ShowAboutForm()
@@ -342,9 +377,9 @@ namespace Kbg.NppPluginNET
 
             //strHelpEngPath = ReadFiles.LanguageFolder(); 
 
-            ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText(),
-                "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
-                "FUNCTION");
+            ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText());//,
+            //    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
+            //    "FUNCTION");
             readFiles.GetHTMLFile();
             //string SearchText = Npp.editor.GetSelText();
             //string XmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml";
@@ -369,8 +404,8 @@ class ReadFiles
     //string XmlElementName = "FUNCTION";
 
     string searchText;
-    string xmlSourceFile;
-    string xmlElementName;
+    //string xmlSourceFile;
+    //string xmlElementName;
 
     //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
     string[] XmlVariableSources = { "slhlpgcode.xml",
@@ -387,7 +422,7 @@ class ReadFiles
                                     "sinumerik_btss_n.xml",
                                     "sinumerik_btss_t.xml"};
 
-    string[] XmlFileFolder =    { "/siemens/sinumerik/hmi/cfg/",
+    string[] XmlFileFolder =    {   "/siemens/sinumerik/hmi/cfg/",
                                     "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
                                     "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
                                     "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
@@ -401,6 +436,22 @@ class ReadFiles
                                     "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/",
                                     "/siemens/sinumerik/hmi/hlps/hlp_eng/eng/"};
 
+    string[] HelpDetailFolder = {   "programming/",
+                                    "sinumerik_md_axis/",
+                                    "sinumerik_md_chan/",
+                                    "sinumerik_md_compile/",
+                                    "sinumerik_md_hmi/",
+                                    "sinumerik_md_nck/",
+                                    "sinumerik_md_set/",
+                                    "sinumerik_btss_a/",
+                                    "sinumerik_btss_b/",
+                                    "sinumerik_btss_c/",
+                                    "sinumerik_btss_m/",
+                                    "sinumerik_btss_n/",
+                                    "sinumerik_btss_t/"};
+
+
+    string HelpFileFolder = "/siemens/sinumerik/hmi/hlps/" ;
     string XmlRootFolder =    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin" ;
 
     string[] XmlSearchElement = { "FUNCTION", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY" };
@@ -414,7 +465,7 @@ class ReadFiles
         get { return this.searchText; }
         //set { this.searchText = value; }
     }
-
+    /*
     public string XmlSourceFile
     {
         get { return this.xmlSourceFile; }
@@ -426,12 +477,12 @@ class ReadFiles
         get { return this.xmlElementName; }
         //set { this.xmlElementName = value; }
     }
-
-    public ReadFiles(string searchText, string xmlSourceFile, string xmlElementName)
+    */
+    public ReadFiles(string searchText)//, string xmlSourceFile, string xmlElementName)
     {
         this.searchText = searchText;
-        this.xmlSourceFile = xmlSourceFile;
-        this.xmlElementName = xmlElementName;
+        //this.xmlSourceFile = xmlSourceFile;
+        //this.xmlElementName = xmlElementName;
     }
 
     private static String LanguageFolder()
@@ -511,36 +562,58 @@ class ReadFiles
 
         if (this.searchText.Length > 0)
         {
+            //Prescanning, if MD is searched, than get Number and search for this one
+
+            //string GetPrescanResult = PreScanner();
+            PreScanner();
+            //MessageBox.Show($"GetPrescanResult: {GetPrescanResult}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            //MessageBox.Show($"this.searchText: {this.searchText}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             string SearchResultLink = "";
             int CheckIndex = 0;
             //Creates an XML Reader for the G-Code Help
-
+            //MessageBox.Show($"For Loop i: {CheckIndex}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             //MessageBox.Show($"Search Text:<{this.searchText}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            for (int i = 0; i <=  XmlVariableSources.Length ; i++)
+            for (int i = 0; i <  XmlVariableSources.Length ; i++)
             {
                 CheckIndex = i;
-                //MessageBox.Show($"XmlRootFolder: <{XmlRootFolder}> XmlFileFolder[{i}] : <{XmlFileFolder[i]}> XmlVariableSources[{i}]: <{XmlVariableSources[i]}> XmlSearchElement[{i}]: <{XmlSearchElement[i]}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SearchResultLink = readXmlFile( this.XmlRootFolder + this.XmlFileFolder[i] + this.XmlVariableSources[i], this.XmlSearchElement[i],  this.searchText);
-                if ((SearchResultLink.Length > 0) && (SearchResultLink.EndsWith(".html")))
+                //MessageBox.Show($"For Loop i: {CheckIndex}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //MessageBox.Show($"XmlRootFolder: <{this.XmlRootFolder}> XmlFileFolder[{i}] : <{this.XmlFileFolder[i]}> XmlVariableSources[{i}]: <{this.XmlVariableSources[i]}> XmlSearchElement[{i}]: <{this.XmlSearchElement[i]}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //SearchResultLink = readXmlFile( this.XmlRootFolder + this.XmlFileFolder[i] + this.XmlVariableSources[i], this.XmlSearchElement[i],  this.searchText);
+                SearchResultLink = readXmlFile(CheckIndex);
+                //if ((SearchResultLink.Length > 0) && (SearchResultLink.EndsWith(".html")))
+                if ((SearchResultLink.Length > 0) && (SearchResultLink.Contains(".html")))
                 {
                     break;
                 }
-
+                //MessageBox.Show($"For Loop i: {CheckIndex}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            MessageBox.Show($"Search Result Link:<{SearchResultLink}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            if (SearchResultLink.Length == 0)
+            //MessageBox.Show($"Search<{CheckIndex}> Result Link:<{SearchResultLink}>!", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if ((SearchResultLink.Length == 0) &! (Main.autoSearchActive))
             {
                 MessageBox.Show($"Search for <{this.searchText}> has no Results!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
+                if (SearchResultLink.Contains("#"))
                 {
-                    ExecuteHtml(SearchResultLink);
+                    //MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //SearchResultLink until SearchResultLink.LastIndexOf("#")
+                    SearchResultLink = SearchResultLink.Remove(SearchResultLink.LastIndexOf("#"));
+                   // MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
+                // if (SearchResultLink.Length > 0) //& (SearchResultLink.(".html")))
+                {
+                    ExecuteHtml(SearchResultLink, CheckIndex);
                 }
                 else
                 {
-                    MessageBox.Show($"Search Result for <{this.searchText}> is not a valid HTML-Help!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (Main.autoSearchActive == false)
+                    {
+                        MessageBox.Show($"Search Result for <{this.searchText}> is not a valid for HTML-Help!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
@@ -551,49 +624,221 @@ class ReadFiles
 
     }
     
-    static string readXmlFile(string xmlSourceFile, string xmlElementName, string searchText)
-    {
+    public string readXmlFile(int Index)//string xmlSourceFile, string xmlElementName, string searchText)
+    {   // es reicht wenn nur der Index übergeben wird??????????????????????????????????????
         //string result = "";
         bool getHTML = false;
         string SearchResultValue = "";
         string SearchResultLink = "";
         //Creates an XML Reader for the G-Code Help
-       
-        XmlReaderSettings settings = new XmlReaderSettings();
-        settings.DtdProcessing = DtdProcessing.Parse;
-        XmlReader readerXmlFile = XmlReader.Create(xmlSourceFile, settings);
-        readerXmlFile.MoveToContent();
-        while (readerXmlFile.Read())
-        {
-            switch (readerXmlFile.NodeType)
+
+        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[Index] + this.XmlVariableSources[Index];
+        //xmlSourceFile
+        if (File.Exists(xmlSourceFile))
             {
-                case XmlNodeType.Element:
-                    if (readerXmlFile.Name == xmlElementName)
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.DtdProcessing = DtdProcessing.Parse;
+                XmlReader readerXmlFile = XmlReader.Create(xmlSourceFile, settings);
+                readerXmlFile.MoveToContent();
+                //MessageBox.Show($"xmlSourceFile: {xmlSourceFile}" +
+                //    $"xmlElementName: {xmlElementName}" +
+                //    $"searchText: {searchText}", "Debug Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                while (readerXmlFile.Read())
+                {
+                    switch (readerXmlFile.NodeType)
                     {
-                        if (readerXmlFile.AttributeCount > 0)
-                        {
-                            readerXmlFile.MoveToNextAttribute();
-                            if (readerXmlFile.Value == searchText)
+                        case XmlNodeType.Element:
+                            if (readerXmlFile.Name == this.XmlSearchElement[Index])
                             {
-                                getHTML = true;
-                                SearchResultValue = readerXmlFile.Value;
+                                if (readerXmlFile.AttributeCount > 0)
+                                {
+                                    if (readerXmlFile.AttributeCount >= XmlTargetAttribute[Index])
+                                    {
+                                        for (int i = 0; i < XmlTargetAttribute[Index]; i++)
+                                        {
+                                            readerXmlFile.MoveToNextAttribute();
+                                        }
+                                        if ((readerXmlFile.Value == searchText) && (this.XmlWhereIsHTML[Index] == "txt"))
+                                        {
+                                            getHTML = true;
+                                            SearchResultValue = readerXmlFile.Value;
+                                        }
+                                        if ((readerXmlFile.Value == searchText) && (this.XmlWhereIsHTML[Index] == "atr1") && (XmlTargetAttribute[Index] == 2))
+                                        {
+                                            SearchResultValue = readerXmlFile.Value;
+                                            readerXmlFile.MoveToFirstAttribute();
+                                            SearchResultLink = readerXmlFile.Value;
+                                            //MessageBox.Show($"SearchResultValue: <{SearchResultValue}> SearchResultLink: <{SearchResultLink}>!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                            goto Finish;
+                                        }
+                                    }
+                                }
                             }
-                        }
+                            break;
+                        case XmlNodeType.Text:
+                            if (getHTML)
+                            {
+                                SearchResultLink = readerXmlFile.Value;
+                                getHTML = false;
+                                goto Finish;
+                            }
+                            break;
                     }
-                    break;
-                case XmlNodeType.Text:
-                    if (getHTML)
-                    {
-                        SearchResultLink = readerXmlFile.Value;
-                        getHTML = false;
-                        goto Finish;
-                    }
-                    break;
+                }
             }
+        else
+        {
+            MessageBox.Show($"Search Reference File <{xmlSourceFile}> not found!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
-        Finish:
+    Finish:
         return SearchResultLink;
     }
+
+    public void PreScanner()
+    {
+        //MessageBox.Show($"searchText <{this.searchText}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        string GetPrescanResult = preScanXmlForMachineData();
+        if (GetPrescanResult.Length == 0)
+        {
+            string LastCharIsNumber = this.searchText;
+            GetPrescanResult = preScanXmlForSystemvariable();
+            if (GetPrescanResult.Length == 0)
+            {
+                //Here we have to check if the last char is a number????????????????????????????????????????
+                goto JumpOver;
+                while ((Int32.Parse(LastCharIsNumber.Substring(LastCharIsNumber.Length - 1)) >= 0) && (LastCharIsNumber.Length > 0))
+                {
+                    GetPrescanResult = preScanXmlForSystemvariable();
+                    LastCharIsNumber = LastCharIsNumber.Substring(0, LastCharIsNumber.Length - 1);
+
+                    if (GetPrescanResult.Length > 0)
+                    {
+                        this.searchText = GetPrescanResult;
+                        break;
+                    }
+                    MessageBox.Show($"LastCharIsNumber <{LastCharIsNumber}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            JumpOver:
+                { }
+            }
+            else
+            {
+                this.searchText = GetPrescanResult;
+            }
+        }
+        else 
+        {
+            if (GetPrescanResult.Length > 0)
+            {
+                if ((Int32.Parse(GetPrescanResult) >= 8999) && (Int32.Parse(GetPrescanResult) <= 69999))
+                {
+                    this.searchText = GetPrescanResult;
+                }
+            }
+        }
+        //MessageBox.Show($"searchText <{this.searchText}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //return GetPrescanResult;
+    }
+
+    public string preScanXmlForMachineData()
+    {   
+        bool getHTML = false;
+        string SearchResultValue = "";
+        string SearchResultMachineData = "";
+        //Creates an XML Reader for the G-Code Help
+
+        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[0] + "mdreference.xml";
+        //MessageBox.Show($"Search Reference File <{xmlSourceFile}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //xmlSourceFile
+        if (File.Exists(xmlSourceFile))
+        {
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.DtdProcessing = DtdProcessing.Parse;
+            XmlReader readerXmlFile = XmlReader.Create(xmlSourceFile, settings);
+            readerXmlFile.MoveToContent();
+  
+            while (readerXmlFile.Read())
+            {
+                switch (readerXmlFile.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if (readerXmlFile.Name == "MDATA")
+                        {
+                            if (readerXmlFile.AttributeCount > 0)
+                            {
+                                readerXmlFile.MoveToNextAttribute();
+                                if (readerXmlFile.Value == searchText) 
+                                {
+                                    getHTML = true;
+                                    SearchResultValue = readerXmlFile.Value;
+                                }
+                            }
+                        }
+                        break;
+                    case XmlNodeType.Text:
+                        if (getHTML)
+                        {
+                            SearchResultMachineData = readerXmlFile.Value;
+                            getHTML = false;
+                            //MessageBox.Show($"SearchResultMachineData <{SearchResultMachineData}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            //goto Finish;
+                        }
+                        break;
+                }
+            }
+        }       
+    return SearchResultMachineData;
+    }
+    public string preScanXmlForSystemvariable()
+    {
+        bool getHTML = false;
+        string SearchResultValue = "";
+        string SearchResultSystemVariable = "";
+        //Creates an XML Reader for the G-Code Help
+
+        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[0] + "sysvarreference.xml";
+        //MessageBox.Show($"Search Reference File <{xmlSourceFile}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //xmlSourceFile
+        if (File.Exists(xmlSourceFile))
+        {
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.DtdProcessing = DtdProcessing.Parse;
+            XmlReader readerXmlFile = XmlReader.Create(xmlSourceFile, settings);
+            readerXmlFile.MoveToContent();
+
+            while (readerXmlFile.Read())
+            {
+                switch (readerXmlFile.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if (readerXmlFile.Name == "SYSVAR")
+                        {
+                            if (readerXmlFile.AttributeCount > 0)
+                            {
+                                readerXmlFile.MoveToNextAttribute();
+                                if (readerXmlFile.Value == searchText)
+                                {
+                                    getHTML = true;
+                                    SearchResultValue = readerXmlFile.Value;
+                                }
+                            }
+                        }
+                        break;
+                    case XmlNodeType.Text:
+                        if (getHTML)
+                        {
+                            SearchResultSystemVariable = readerXmlFile.Value;
+                            getHTML = false;
+                            //MessageBox.Show($"SearchResultMachineData <{SearchResultMachineData}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            //goto Finish;
+                        }
+                        break;
+                }
+            }
+        }
+        return SearchResultSystemVariable;
+    }
+
 
     public void GetSearchVariableFromText()
     {
@@ -640,26 +885,38 @@ class ReadFiles
 
         for (int i = 0; XmlVariableSources.Length <= i; i++)
         {
-            xmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/" + "siemens/sinumerik/hmi/hlps/hlp_eng/eng/" + XmlVariableSources[i];
+            //xmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/" + "siemens/sinumerik/hmi/hlps/hlp_eng/eng/" + XmlVariableSources[i];
 
         }
 
     }
 
 
-    private void ExecuteHtml(string executeHtml)
+    private void ExecuteHtml(string executeHtml, int index)
     {
         string LanguageFolder = ReadFiles.LanguageFolder();
-        string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
-        string strHelpPath = "siemens/sinumerik/hmi/hlps/";
-        string strHelpDetail = "programming/";
+        string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+        //string strHelpPath = "siemens/sinumerik/hmi/hlps/";
+        //string strHelpDetail = "programming/";
 
-        string strHyperlink = strPluginPath + strHelpPath + LanguageFolder + strHelpDetail + executeHtml;
-        HelpScreen.HandOverURL = strPluginPath + strHelpPath + LanguageFolder + strHelpDetail + executeHtml;
-        //System.Diagnostics.Process.Start(strHyperlink);
-        //Main main = new Main();
-        Main.OpenBrowser();
-        //; Main.
+
+        //string XmlRootFolder = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+
+
+        string checkHyperlink = XmlRootFolder + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+        //string checkHyperlink = strPluginPath + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+        if (File.Exists(checkHyperlink))
+        {
+            HelpScreen.HandOverURL = strPluginPath + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+            //System.Diagnostics.Process.Start(strHyperlink);
+            //Main main = new Main();
+            Main.OpenBrowser();
+            //; Main.
+        }
+        else
+        {
+            MessageBox.Show($"HTML-Help: {checkHyperlink} does not Exist!", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }      
     }
 
 }
