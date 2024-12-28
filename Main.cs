@@ -46,7 +46,7 @@ namespace Kbg.NppPluginNET
         public static HelpScreen helpScreen = null;//new HelpScreen();
         static internal int IdAboutForm = -1;
         static internal int IdSelectionRememberingForm = -1;
-        static internal int IdCloseHtmlTag = -1;
+        static internal int IdAutoSearchTag = -1;
         static internal int IdGcodeHelpForm = -1;
         #endregion
 
@@ -68,9 +68,13 @@ namespace Kbg.NppPluginNET
 
             PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
             PluginBase.SetCommand(1, "G-Code Help", GcodeHelp, new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
-            PluginBase.SetCommand(2, "---", null);
+            //PluginBase.SetCommand(2, "---", null);
             //PluginBase.SetCommand(3, "&Settings", OpenSettings);
-            PluginBase.SetCommand(3, "Auto Search", EnableAutoSearch); //IdAboutForm = 4;
+            PluginBase.SetCommand(2, "Auto Search", EnableAutoSearch, new ShortcutKey(true, true, true, Keys.X),
+                settings.auto_search_active_tag
+                ); IdAutoSearchTag = 2; //IdAboutForm = 4;
+            PluginBase.SetCommand(3, "---", null);
+            //PluginBase.SetCommand(2, "---", null);
             PluginBase.SetCommand(4, "A&bout", ShowAboutForm); //IdAboutForm = 4;
 
 
@@ -266,17 +270,19 @@ namespace Kbg.NppPluginNET
 
         static void EnableAutoSearch()
         {
+            PluginBase.CheckMenuItemToggle(IdAutoSearchTag, ref autoSearchActive);
             if (autoSearchActive)
             {
-                autoSearchActive = false;
-                MessageBox.Show($"Automatic Search Modus is off!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //autoSearchActive = false;
+                MessageBox.Show($"Automatic Search Modus is active!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                autoSearchActive = true;
-                MessageBox.Show($"Automatic Search Modus is active!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //autoSearchActive = true;                
+                MessageBox.Show($"Automatic Search Modus is off!", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
+           
+
         }
 
         static void ShowAboutForm()
@@ -596,16 +602,20 @@ class ReadFiles
             }
             else
             {
-                if (SearchResultLink.Contains("#"))
+                if (((SearchResultLink.Contains("#")) & (SearchResultLink.Contains(".html"))) | ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html"))))
                 {
                     //MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //SearchResultLink until SearchResultLink.LastIndexOf("#")
-                    SearchResultLink = SearchResultLink.Remove(SearchResultLink.LastIndexOf("#"));
+                   //SearchResultLink = SearchResultLink.Remove(SearchResultLink.LastIndexOf("#"));
+
+
+
+
                    // MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
+                //}
+                //if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
                 // if (SearchResultLink.Length > 0) //& (SearchResultLink.(".html")))
-                {
+                //{
                     ExecuteHtml(SearchResultLink, CheckIndex);
                 }
                 else
@@ -701,25 +711,47 @@ class ReadFiles
         if (GetPrescanResult.Length == 0)
         {
             string LastCharIsNumber = this.searchText;
+            string SearchTextBuffer = this.searchText;
             GetPrescanResult = preScanXmlForSystemvariable();
             if (GetPrescanResult.Length == 0)
             {
                 //Here we have to check if the last char is a number????????????????????????????????????????
-                goto JumpOver;
-                while ((Int32.Parse(LastCharIsNumber.Substring(LastCharIsNumber.Length - 1)) >= 0) && (LastCharIsNumber.Length > 0))
+                //goto JumpOver;
+                string strLastChar;
+                for (int i = LastCharIsNumber.Length; i > 2; i--)
                 {
-                    GetPrescanResult = preScanXmlForSystemvariable();
-                    LastCharIsNumber = LastCharIsNumber.Substring(0, LastCharIsNumber.Length - 1);
-
-                    if (GetPrescanResult.Length > 0)
-                    {
-                        this.searchText = GetPrescanResult;
-                        break;
+                    //get last Character, check if it is a number
+                    strLastChar = LastCharIsNumber.Substring(LastCharIsNumber.Length - 1);
+                    //MessageBox.Show($"LastCharIsNumber: <{LastCharIsNumber}> strLastChar: <{strLastChar}>", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (Int32.TryParse(strLastChar,out int checkNum) == true)
+                    {                        
+                        // If Last Char is number, reduce Strinlength by 1 char and search again
+                        LastCharIsNumber = LastCharIsNumber.Substring(0, LastCharIsNumber.Length - 1);
+                        this.searchText = LastCharIsNumber;
+                        GetPrescanResult = preScanXmlForSystemvariable();
+                        if (GetPrescanResult.Length > 0)
+                        {
+                            this.searchText = GetPrescanResult;
+                            break;
+                        }
+                        else
+                        {
+                            //Restore Search Text
+                            this.searchText = SearchTextBuffer;
+                        }
                     }
-                    MessageBox.Show($"LastCharIsNumber <{LastCharIsNumber}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            JumpOver:
-                { }
+                    else
+                    {
+                        //Last Character is not a number
+                        this.searchText = SearchTextBuffer;
+                        break;
+                        
+                    }
+
+                    //MessageBox.Show($"LastCharIsNumber <{LastCharIsNumber}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }               
+            //JumpOver:
+              //  { }
             }
             else
             {
@@ -905,9 +937,17 @@ class ReadFiles
 
         string checkHyperlink = XmlRootFolder + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
         //string checkHyperlink = strPluginPath + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+        if ((checkHyperlink.Contains("#")) & (checkHyperlink.Contains(".html")))
+        {
+            //SearchResultLink until checkHyperlink.LastIndexOf("#")
+            //SearchResultLink = SearchResultLink.Remove(SearchResultLink.LastIndexOf("#"));
+            checkHyperlink = checkHyperlink.Remove(checkHyperlink.LastIndexOf("#"));
+        }
+
         if (File.Exists(checkHyperlink))
         {
             HelpScreen.HandOverURL = strPluginPath + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+            //HelpScreen.
             //System.Diagnostics.Process.Start(strHyperlink);
             //Main main = new Main();
             Main.OpenBrowser();

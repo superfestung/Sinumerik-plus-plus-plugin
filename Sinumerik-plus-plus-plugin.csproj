@@ -83,6 +83,12 @@
     <Compile Include="Forms\CodeGenerator.Designer.cs">
       <DependentUpon>CodeGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EditHelpScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditHelpScreen.Designer.cs">
+      <DependentUpon>EditHelpScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HelpScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CodeGenerator.resx">
       <DependentUpon>CodeGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditHelpScreen.resx">
+      <DependentUpon>EditHelpScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HelpScreen.resx">
       <DependentUpon>HelpScreen.cs</DependentUpon>

@@ -16,7 +16,7 @@ namespace NppDemo.Utils
             base.OnSettingsChanged();
             Main.RestyleEverything();
             // make sure to check the HTML tag plugin menu item if the setting is currently true
-            PluginBase.CheckMenuItem(Main.IdCloseHtmlTag, close_html_tag);
+            PluginBase.CheckMenuItem(Main.IdAutoSearchTag, auto_search_active_tag);
         }
 
         #region MISCELLANEOUS
@@ -29,7 +29,7 @@ namespace NppDemo.Utils
 
         [Description("Automatically close HTML/XML tags when the current file extension is \"html\" or \"xml\"?"), 
             Category("Miscellaneous"), DefaultValue(false)]
-        public bool close_html_tag { get; set; }
+        public bool auto_search_active_tag { get; set; }
         #endregion
 
         #region STYLING
