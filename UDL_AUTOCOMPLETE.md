@@ -82,9 +82,6 @@ Machine Data:
 
 Restrictions and Limitations:
 - After Loading the Autocompletion File, it might take a while until the autocomplete highlight text is visible!
-- Todos:
-     - Shorten Description to e.g. 100 charcters, continue on new line
-     - Shorten Paramter Sisplay to e.g. 100 charcters, continue on new line
-     - Check and remove of special charcters
+
 
 Send Feedback to superfestung@icloud.com 
