@@ -19,13 +19,15 @@ https://www.youtube.com/@Superfestung
 Installation:
     
 1. Get the 64bit or 32bit package:
+   
+   https://github.com/superfestung/Sinumerik-plus-plus-plugin/releases
       
       ![image](https://github.com/user-attachments/assets/3e494ce0-bdc0-4c4f-9f4c-3b497180c0ad) ![image](https://github.com/user-attachments/assets/98708862-56eb-4208-809d-eca2a168d286)
 
    
    
-2. Copy Sinumerik-plus-plus-plugin folder to the following folders!
-3. 64bit Notepad++: "C:\Program Files\Notepad++\plugins\Sinumerik-plus-plus-plugin"
+3. Copy Sinumerik-plus-plus-plugin folder to the following folders!
+4. 64bit Notepad++: "C:\Program Files\Notepad++\plugins\Sinumerik-plus-plus-plugin"
    
    32bit Notepad++: "C:\Program Files (x86)\Notepad++\plugins\Sinumerik-plus-plus-plugin"
 5. Enjoy!
