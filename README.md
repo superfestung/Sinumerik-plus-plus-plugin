@@ -9,6 +9,7 @@ Features:
 4. Automatic Code Completion for Sinumerik(NC-Code.xml)
 
 Read Information for UDL and Autocomplete Installation:
+[UDL_AUTOCOMPLETE.md](https://github.com/superfestung/Sinumerik-plus-plus-plugin/blob/master/UDL_AUTOCOMPLETE.md)
 
 ![image](https://github.com/user-attachments/assets/4eb14ba2-4d39-4ef7-8bd7-82ffad632667)
 
