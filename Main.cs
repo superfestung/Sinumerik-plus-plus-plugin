@@ -67,10 +67,10 @@ namespace Kbg.NppPluginNET
             // the "&" before the "D" means that D is an accelerator key for selecting this option 
 
             PluginBase.SetCommand(0, "Read the Online Help", OnlineHelp);
-            PluginBase.SetCommand(1, "G-Code Help", GcodeHelp, new ShortcutKey(true, true, true, Keys.F)); IdGcodeHelpForm = 1;
+            PluginBase.SetCommand(1, "G-Code Help", GcodeHelp, new ShortcutKey(true, true, true, Keys.S)); IdGcodeHelpForm = 1;
             //PluginBase.SetCommand(2, "---", null);
             //PluginBase.SetCommand(3, "&Settings", OpenSettings);
-            PluginBase.SetCommand(2, "Auto Search", EnableAutoSearch, new ShortcutKey(true, true, true, Keys.X),
+            PluginBase.SetCommand(2, "Auto Search", EnableAutoSearch, new ShortcutKey(true, true, true, Keys.A),
                 settings.auto_search_active_tag
                 ); IdAutoSearchTag = 2; //IdAboutForm = 4;
             PluginBase.SetCommand(3, "---", null);
@@ -296,13 +296,30 @@ namespace Kbg.NppPluginNET
         {
             //Open Online Helpfiles
             //VariableHelp
-            string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+            //string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+            string strPluginPath = "";
+            string strPluginPathX86 = "file:///C:/Program%20Files%20(x86)/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+            string strPluginPathX64 = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
             string strHelpPath = "siemens/sinumerik/hmi/hlps/";
             string strHelpEngPath = "hlp_eng/eng/";
             string strHelpDetail = "programming/";
             string strHelpFileName = "3018717963.html";
 
-            HelpScreen.HandOverURL = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
+            //string NppRootFolder = Npp.notepad.GetPluginConfigPath();
+
+            string NppVersionString = Npp.nppVersionStr;
+            if(NppVersionString.Contains("64bit"))
+            {
+                strPluginPath = strPluginPathX64;
+            }
+            if (NppVersionString.Contains("32bit"))
+            {
+                strPluginPath = strPluginPathX86;
+            }
+
+            //MessageBox.Show($"Notepad: {NppVersionString}", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            HelpScreen.HandOverURL = ReadFiles.ReturnPluginFolder() + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
             OpenBrowser();
 
         }
@@ -361,39 +378,10 @@ namespace Kbg.NppPluginNET
         }
 
         static void GcodeHelp()
-        {
-            //+------------------------------------------------------------------------------+
-            //|----------------------+---------------+---------------------------------------|
-            //|----------------------|   To-Do's     |---------------------------------------|
-            //|----------------------+---------------+---------------------------------------|
-            //| - Add variable Search for System Variables                                   |
-            //| - Add variable Search for Machine Data                                       |
-            //| - Make Pop-Up/Form for showing Help                                          |
-            //| - Make Buttons for Browsing Help                                             |
-            //|______________________________________________________________________________|
+        {            
+            ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText());
 
-            //VariableHelp
-            //string strPluginPath = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
-            //string strHelpPath = "siemens/sinumerik/hmi/hlps/";
-            //string strHelpEngPath = "hlp_eng/eng/";
-            //string strHelpDetail = "programming/";
-            //string strHelpFileName = "3018717963.html";
-
-            //
-
-            //strHelpEngPath = ReadFiles.LanguageFolder(); 
-
-            ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText());//,
-            //    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
-            //    "FUNCTION");
             readFiles.GetHTMLFile();
-            //string SearchText = Npp.editor.GetSelText();
-            //string XmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml";
-            //string XmlElementName = "FUNCTION";
-            //HelpScreen.HandOverURL = strPluginPath + strHelpPath + strHelpEngPath + strHelpDetail + strHelpFileName;
-
-            //OpenBrowser();
-
         }
 
 
@@ -458,7 +446,9 @@ class ReadFiles
 
 
     string HelpFileFolder = "/siemens/sinumerik/hmi/hlps/" ;
-    string XmlRootFolder =    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin" ;
+    //string XmlRootFolder =    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin" ;
+    string strXmlRootFolderX86 = "C:/Program Files (x86)/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+    string strXmlRootFolderX64 = "C:/Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
 
     string[] XmlSearchElement = { "FUNCTION", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY", "ENTRY" };
     int[] XmlTargetAttribute = { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
@@ -471,25 +461,46 @@ class ReadFiles
         get { return this.searchText; }
         //set { this.searchText = value; }
     }
-    /*
-    public string XmlSourceFile
-    {
-        get { return this.xmlSourceFile; }
-        //set { this.xmlSourceFile = value; }
-    }
-
-    public string XmlElementName
-    {
-        get { return this.xmlElementName; }
-        //set { this.xmlElementName = value; }
-    }
-    */
-    public ReadFiles(string searchText)//, string xmlSourceFile, string xmlElementName)
+    
+    public ReadFiles(string searchText)
     {
         this.searchText = searchText;
-        //this.xmlSourceFile = xmlSourceFile;
-        //this.xmlElementName = xmlElementName;
+
     }
+
+    private string ReturnXmlRootFolder()
+    {
+        string ReturnValue= "";
+        string NppVersionString = Npp.nppVersionStr;
+        if (NppVersionString.Contains("64bit"))
+        {
+            ReturnValue = this.strXmlRootFolderX64;
+        }
+        if (NppVersionString.Contains("32bit"))
+        {
+            ReturnValue = this.strXmlRootFolderX86;
+        }
+        return ReturnValue;
+    }
+
+    public static string ReturnPluginFolder()
+    {
+        string ReturnPluginPath = "";
+        string strPluginPathX86 = "file:///C:/Program%20Files%20(x86)/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+        string strPluginPathX64 = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/";
+ 
+        string NppVersionString = Npp.nppVersionStr;
+        if (NppVersionString.Contains("64bit"))
+        {
+            ReturnPluginPath = strPluginPathX64;
+        }
+        if (NppVersionString.Contains("32bit"))
+        {
+            ReturnPluginPath = strPluginPathX86;
+        }
+       return ReturnPluginPath;
+    }
+
 
     private static String LanguageFolder()
     {
@@ -604,18 +615,6 @@ class ReadFiles
             {
                 if (((SearchResultLink.Contains("#")) & (SearchResultLink.Contains(".html"))) | ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html"))))
                 {
-                    //MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //SearchResultLink until SearchResultLink.LastIndexOf("#")
-                   //SearchResultLink = SearchResultLink.Remove(SearchResultLink.LastIndexOf("#"));
-
-
-
-
-                   // MessageBox.Show($"link {SearchResultLink} Contains a # at <{SearchResultLink.LastIndexOf("#")}> !", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //}
-                //if ((SearchResultLink.Length > 0) & (SearchResultLink.EndsWith(".html")))
-                // if (SearchResultLink.Length > 0) //& (SearchResultLink.(".html")))
-                //{
                     ExecuteHtml(SearchResultLink, CheckIndex);
                 }
                 else
@@ -635,14 +634,14 @@ class ReadFiles
     }
     
     public string readXmlFile(int Index)//string xmlSourceFile, string xmlElementName, string searchText)
-    {   // es reicht wenn nur der Index übergeben wird??????????????????????????????????????
+    {   
         //string result = "";
         bool getHTML = false;
         string SearchResultValue = "";
         string SearchResultLink = "";
-        //Creates an XML Reader for the G-Code Help
 
-        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[Index] + this.XmlVariableSources[Index];
+        //Creates an XML Reader for the G-Code Help
+        string xmlSourceFile = ReturnXmlRootFolder() + this.XmlFileFolder[Index] + this.XmlVariableSources[Index];
         //xmlSourceFile
         if (File.Exists(xmlSourceFile))
             {
@@ -777,9 +776,8 @@ class ReadFiles
         bool getHTML = false;
         string SearchResultValue = "";
         string SearchResultMachineData = "";
-        //Creates an XML Reader for the G-Code Help
 
-        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[0] + "mdreference.xml";
+        string xmlSourceFile = ReturnXmlRootFolder() + this.XmlFileFolder[0] + "mdreference.xml";
         //MessageBox.Show($"Search Reference File <{xmlSourceFile}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         //xmlSourceFile
         if (File.Exists(xmlSourceFile))
@@ -826,9 +824,8 @@ class ReadFiles
         bool getHTML = false;
         string SearchResultValue = "";
         string SearchResultSystemVariable = "";
-        //Creates an XML Reader for the G-Code Help
 
-        string xmlSourceFile = this.XmlRootFolder + this.XmlFileFolder[0] + "sysvarreference.xml";
+        string xmlSourceFile = ReturnXmlRootFolder() + this.XmlFileFolder[0] + "sysvarreference.xml";
         //MessageBox.Show($"Search Reference File <{xmlSourceFile}> ", "Search Variable Display", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         //xmlSourceFile
         if (File.Exists(xmlSourceFile))
@@ -871,71 +868,31 @@ class ReadFiles
         return SearchResultSystemVariable;
     }
 
-
-    public void GetSearchVariableFromText()
-    {
-        //-----------------------------------------------------------------------
-        //Check if variable is G-Code
-        //"card\siemens\sinumerik\hmi\cfg\slhlpgcode.xml"
-
-        //-----------------------------------------------------------------------
-        // Check if Systemvariable or BTSS
-        //Check Textfile from Sinumerik ONE
-        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvcONE.txt"
-
-        //Check Textfile from Sinumerik 840Dsl, start at line of ONE End
-        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvc840.txt"
-
-        //Check Textfile from SInumerik 828D, start at line of ONE End
-        //"card\siemens\sinumerik\hmi\cfg\TraceDB\SignalSvc828.txt"
-
-        //If variable found, get coresponding BTSS Variable
-
-        //Search BTSS Variable in the XML Files, Get HTML File
-
-        //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
-        //"sinumerik_btss_a.xml"
-        //"sinumerik_btss_b.xml"
-        //"sinumerik_btss_c.xml"
-        //"sinumerik_btss_m.xml"
-        //"sinumerik_btss_n.xml"
-        //"sinumerik_btss_t.xml"
-
-
-        //-----------------------------------------------------------------------
-        // Check if Machine Data exists
-        //"card\siemens\sinumerik\hmi\cfg\mdreference.xml"
-
-        //Search for MD Number in XML Files:
-        //"\card\siemens\sinumerik\hmi\hlps\hlp_eng\eng\"
-        //"sinumerik_md_axis.xml"
-        //"sinumerik_md_chan.xml"
-        //"sinumerik_md_compile.xml"
-        //"sinumerik_md_hmi.xml"
-        //"sinumerik_md_nck.xml"
-        //"sinumerik_md_set.xml"
-
-        for (int i = 0; XmlVariableSources.Length <= i; i++)
-        {
-            //xmlSourceFile = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/" + "siemens/sinumerik/hmi/hlps/hlp_eng/eng/" + XmlVariableSources[i];
-
-        }
-
-    }
-
-
     private void ExecuteHtml(string executeHtml, int index)
     {
         string LanguageFolder = ReadFiles.LanguageFolder();
-        string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+       // string strPluginPath = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
         //string strHelpPath = "siemens/sinumerik/hmi/hlps/";
         //string strHelpDetail = "programming/";
-
-
         //string XmlRootFolder = "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
 
+        string strPluginPath = "";
+        string strPluginPathX86 = "file:///C:/Program%20Files%20(x86)/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+        string strPluginPathX64 = "file:///C:/Program%20Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+        //string strXmlRootFolderX86 = "C:/Program Files (x86)/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+        //string strXmlRootFolderX64 = "C:/Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin";
+        
+        string NppVersionString = Npp.nppVersionStr;
+        if (NppVersionString.Contains("64bit"))
+        {
+            strPluginPath = strPluginPathX64;
+        }
+        if (NppVersionString.Contains("32bit"))
+        {
+            strPluginPath = strPluginPathX86;
+        }
 
-        string checkHyperlink = XmlRootFolder + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
+        string checkHyperlink = ReturnXmlRootFolder() + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
         //string checkHyperlink = strPluginPath + HelpFileFolder + LanguageFolder + HelpDetailFolder[index] + executeHtml;
         if ((checkHyperlink.Contains("#")) & (checkHyperlink.Contains(".html")))
         {
