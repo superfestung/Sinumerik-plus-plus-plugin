@@ -44,6 +44,7 @@ namespace Kbg.NppPluginNET
         // forms
         public static SelectionRememberingForm selectionRememberingForm = null;
         public static HelpScreen helpScreen = null;//new HelpScreen();
+        public static TextGenerator textGenerator = null;
         static internal int IdAboutForm = -1;
         static internal int IdSelectionRememberingForm = -1;
         static internal int IdAutoSearchTag = -1;
@@ -74,8 +75,9 @@ namespace Kbg.NppPluginNET
                 settings.auto_search_active_tag
                 ); IdAutoSearchTag = 2; //IdAboutForm = 4;
             PluginBase.SetCommand(3, "---", null);
-            //PluginBase.SetCommand(2, "---", null);
-            PluginBase.SetCommand(4, "A&bout", ShowAboutForm); //IdAboutForm = 4;
+            PluginBase.SetCommand(4, "Text Generator", ShowTextGeneratorForm);
+            PluginBase.SetCommand(5, "---", null);
+            PluginBase.SetCommand(6, "A&bout", ShowAboutForm); 
 
 
         }
@@ -290,6 +292,62 @@ namespace Kbg.NppPluginNET
             AboutForm aboutForm = new AboutForm();
             aboutForm.ShowDialog();
             aboutForm.Focus();
+        }
+
+        static void ShowTextGeneratorForm()
+        {
+            //MessageBox.Show("Notepad Textgenerator", "Auto Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //textGenerator = new TextGenerator();           
+            //Npp.notepad.ShowDockingForm(textGenerator);
+
+            bool wasVisible = textGenerator != null && textGenerator.Visible;
+           
+
+            //Npp.notepad.HideDockingForm(helpScreen);
+            if (textGenerator == null || textGenerator.IsDisposed)
+            {
+                textGenerator = new TextGenerator();
+                Npp.notepad.ShowDockingForm(textGenerator);
+                DisplayTextGeneratorForm(textGenerator);
+            }
+            else
+            {
+                Npp.notepad.ShowDockingForm(textGenerator);
+            }
+        }
+
+        private static void DisplayTextGeneratorForm(TextGenerator form)
+        {
+            
+            using (Bitmap newBmp = new Bitmap(16, 16))
+            {
+                Graphics g = Graphics.FromImage(newBmp);
+                ColorMap[] colorMap = new ColorMap[1];
+                colorMap[0] = new ColorMap();
+                colorMap[0].OldColor = Color.Fuchsia;
+                colorMap[0].NewColor = Color.FromKnownColor(KnownColor.ButtonFace);
+                ImageAttributes attr = new ImageAttributes();
+                attr.SetRemapTable(colorMap);
+                //g.DrawImage(tbBmp_tbTab, new Rectangle(0, 0, 16, 16), 0, 0, 16, 16, GraphicsUnit.Pixel, attr);
+                dockingFormIcon = Icon.FromHandle(newBmp.GetHicon());
+            }
+            
+
+            NppTbData _nppTbData = new NppTbData();
+            _nppTbData.hClient = form.Handle;
+            _nppTbData.pszName = form.Text;
+            // the dlgDlg should be the index of funcItem where the current function pointer is in
+            // this case is 15.. so the initial value of funcItem[15]._cmdID - not the updated internal one !
+            _nppTbData.dlgID = IdSelectionRememberingForm;
+            // dock on left
+            _nppTbData.uMask = NppTbMsg.DWS_DF_CONT_LEFT | NppTbMsg.DWS_ICONTAB | NppTbMsg.DWS_ICONBAR;
+            _nppTbData.hIconTab = (uint)dockingFormIcon.Handle;
+            _nppTbData.pszModuleName = PluginName;
+            IntPtr _ptrNppTbData = Marshal.AllocHGlobal(Marshal.SizeOf(_nppTbData));
+            Marshal.StructureToPtr(_nppTbData, _ptrNppTbData, false);
+
+            Win32.SendMessage(PluginBase.nppData._nppHandle, (uint)NppMsg.NPPM_DMMREGASDCKDLG, 0, _ptrNppTbData);
+            Npp.notepad.ShowDockingForm(form);
         }
 
         static void OnlineHelp()

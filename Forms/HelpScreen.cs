@@ -40,12 +40,7 @@ namespace NppDemo.Forms
         {
             //Search Button
             //webBrowser1.GoBack();
-            ReadFiles readFiles = new ReadFiles(textBox1.Text);
-                //"C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
-                //"FUNCTION");
-            //ReadFiles readFiles = new ReadFiles(Npp.editor.GetSelText(),
-            //    "C://Program Files/Notepad++/plugins/Sinumerik-plus-plus-plugin/siemens/sinumerik/hmi/cfg/slhlpgcode.xml",
-            //    "FUNCTION");
+            ReadFiles readFiles = new ReadFiles(textBox1.Text);                
             readFiles.GetHTMLFile();
         }
 
