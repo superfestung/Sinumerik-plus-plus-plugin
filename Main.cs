@@ -977,3 +977,19 @@ class ReadFiles
 }
 
 
+class Setal
+{
+    int setAlarmNumber;
+    string txtSetAlarmEng;
+    string txtSetAlarmDeu;
+
+    public int SetAlarmNumber { get { return setAlarmNumber; } set { setAlarmNumber = value; } }
+
+    public string SetAlarmEng { get { return txtSetAlarmEng; } set { txtSetAlarmEng = value; } }
+    public string SetAlarmDeu { get { return txtSetAlarmDeu; } set {txtSetAlarmDeu = value; } }
+
+    List<Setal> setals = new List<Setal>();
+
+
+
+}

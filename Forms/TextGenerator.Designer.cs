@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem21 = new System.Windows.Forms.ListViewItem(new string[] {
             "Item 1",
             "subitem"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Item2");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("item3");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem22 = new System.Windows.Forms.ListViewItem("Item2");
+            System.Windows.Forms.ListViewItem listViewItem23 = new System.Windows.Forms.ListViewItem("item3");
+            System.Windows.Forms.ListViewItem listViewItem24 = new System.Windows.Forms.ListViewItem(new string[] {
             "item4",
             "subitem1",
             "subitem2"}, -1);
@@ -45,7 +45,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CycleAlarms = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutSetalarm = new System.Windows.Forms.TableLayoutPanel();
             this.Messages = new System.Windows.Forms.TabPage();
             this.RunMyScreen = new System.Windows.Forms.TabPage();
             this.EasyXML = new System.Windows.Forms.TabPage();
@@ -59,9 +59,16 @@
             this.Translate = new System.Windows.Forms.Button();
             this.Export = new System.Windows.Forms.Button();
             this.Import = new System.Windows.Forms.Button();
+            this.textBoxSetalarmNumHeadline = new System.Windows.Forms.TextBox();
+            this.textBoxSetalarmTxtHeadline = new System.Windows.Forms.TextBox();
+            this.textBoxSetalarmNum0 = new System.Windows.Forms.TextBox();
+            this.textBoxSetalarmTxt0 = new System.Windows.Forms.TextBox();
+            this.textBoxSetalarmNum1 = new System.Windows.Forms.TextBox();
+            this.textBoxSetalarmTxt1 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.PLCAlarmText.SuspendLayout();
             this.CycleAlarms.SuspendLayout();
+            this.tableLayoutSetalarm.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -80,7 +87,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 117);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1081, 519);
+            this.tabControl1.Size = new System.Drawing.Size(815, 519);
             this.tabControl1.TabIndex = 0;
             // 
             // PLCAlarmText
@@ -103,10 +110,10 @@
             this.columnHeader4});
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
+            listViewItem21,
+            listViewItem22,
+            listViewItem23,
+            listViewItem24});
             this.listView1.Location = new System.Drawing.Point(-4, 0);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(1081, 503);
@@ -116,38 +123,71 @@
             // 
             // CycleAlarms
             // 
-            this.CycleAlarms.Controls.Add(this.tableLayoutPanel1);
+            this.CycleAlarms.Controls.Add(this.tableLayoutSetalarm);
             this.CycleAlarms.Location = new System.Drawing.Point(4, 22);
             this.CycleAlarms.Name = "CycleAlarms";
             this.CycleAlarms.Padding = new System.Windows.Forms.Padding(3);
-            this.CycleAlarms.Size = new System.Drawing.Size(1073, 415);
+            this.CycleAlarms.Size = new System.Drawing.Size(807, 493);
             this.CycleAlarms.TabIndex = 1;
             this.CycleAlarms.Text = "Cycle Alarms(SETAL)";
             this.CycleAlarms.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // tableLayoutSetalarm
             // 
-            this.tableLayoutPanel1.ColumnCount = 6;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1074, 416);
-            this.tableLayoutPanel1.TabIndex = 12;
+            this.tableLayoutSetalarm.AutoScroll = true;
+            this.tableLayoutSetalarm.ColumnCount = 2;
+            this.tableLayoutSetalarm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
+            this.tableLayoutSetalarm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxt1, 1, 2);
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNum1, 0, 2);
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNumHeadline, 0, 0);
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxtHeadline, 1, 0);
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNum0, 0, 1);
+            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxt0, 1, 1);
+            this.tableLayoutSetalarm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutSetalarm.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutSetalarm.Name = "tableLayoutSetalarm";
+            this.tableLayoutSetalarm.RowCount = 30;
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutSetalarm.Size = new System.Drawing.Size(801, 487);
+            this.tableLayoutSetalarm.TabIndex = 12;
+            this.tableLayoutSetalarm.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // Messages
             // 
             this.Messages.Location = new System.Drawing.Point(4, 22);
             this.Messages.Name = "Messages";
             this.Messages.Padding = new System.Windows.Forms.Padding(3);
-            this.Messages.Size = new System.Drawing.Size(1073, 415);
+            this.Messages.Size = new System.Drawing.Size(1073, 493);
             this.Messages.TabIndex = 2;
             this.Messages.Text = "Messages(MSG)";
             this.Messages.UseVisualStyleBackColor = true;
@@ -156,7 +196,7 @@
             // 
             this.RunMyScreen.Location = new System.Drawing.Point(4, 22);
             this.RunMyScreen.Name = "RunMyScreen";
-            this.RunMyScreen.Size = new System.Drawing.Size(1073, 415);
+            this.RunMyScreen.Size = new System.Drawing.Size(1073, 493);
             this.RunMyScreen.TabIndex = 3;
             this.RunMyScreen.Text = "Run MyScreen";
             this.RunMyScreen.UseVisualStyleBackColor = true;
@@ -165,7 +205,7 @@
             // 
             this.EasyXML.Location = new System.Drawing.Point(4, 22);
             this.EasyXML.Name = "EasyXML";
-            this.EasyXML.Size = new System.Drawing.Size(1073, 415);
+            this.EasyXML.Size = new System.Drawing.Size(1073, 493);
             this.EasyXML.TabIndex = 4;
             this.EasyXML.Text = "EasyXML";
             this.EasyXML.UseVisualStyleBackColor = true;
@@ -174,7 +214,7 @@
             // 
             this.ToolManagement.Location = new System.Drawing.Point(4, 22);
             this.ToolManagement.Name = "ToolManagement";
-            this.ToolManagement.Size = new System.Drawing.Size(1073, 415);
+            this.ToolManagement.Size = new System.Drawing.Size(1073, 493);
             this.ToolManagement.TabIndex = 5;
             this.ToolManagement.Text = "Tool Management";
             this.ToolManagement.UseVisualStyleBackColor = true;
@@ -183,7 +223,7 @@
             // 
             this.MaintenancePlanner.Location = new System.Drawing.Point(4, 22);
             this.MaintenancePlanner.Name = "MaintenancePlanner";
-            this.MaintenancePlanner.Size = new System.Drawing.Size(1073, 415);
+            this.MaintenancePlanner.Size = new System.Drawing.Size(1073, 493);
             this.MaintenancePlanner.TabIndex = 6;
             this.MaintenancePlanner.Text = "Maintenance Planner(828D)";
             this.MaintenancePlanner.UseVisualStyleBackColor = true;
@@ -192,7 +232,7 @@
             // 
             this.UserMachineData.Location = new System.Drawing.Point(4, 22);
             this.UserMachineData.Name = "UserMachineData";
-            this.UserMachineData.Size = new System.Drawing.Size(1073, 415);
+            this.UserMachineData.Size = new System.Drawing.Size(1073, 493);
             this.UserMachineData.TabIndex = 7;
             this.UserMachineData.Text = "User Machine Data";
             this.UserMachineData.UseVisualStyleBackColor = true;
@@ -270,11 +310,69 @@
             this.Import.Text = "Import";
             this.Import.UseVisualStyleBackColor = true;
             // 
+            // textBoxSetalarmNumHeadline
+            // 
+            this.textBoxSetalarmNumHeadline.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxSetalarmNumHeadline.Enabled = false;
+            this.textBoxSetalarmNumHeadline.Location = new System.Drawing.Point(3, 3);
+            this.textBoxSetalarmNumHeadline.MinimumSize = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNumHeadline.Name = "textBoxSetalarmNumHeadline";
+            this.textBoxSetalarmNumHeadline.Size = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNumHeadline.TabIndex = 0;
+            this.textBoxSetalarmNumHeadline.Text = "Alarm Number";
+            // 
+            // textBoxSetalarmTxtHeadline
+            // 
+            this.textBoxSetalarmTxtHeadline.Enabled = false;
+            this.textBoxSetalarmTxtHeadline.Location = new System.Drawing.Point(105, 3);
+            this.textBoxSetalarmTxtHeadline.MinimumSize = new System.Drawing.Size(300, 20);
+            this.textBoxSetalarmTxtHeadline.Name = "textBoxSetalarmTxtHeadline";
+            this.textBoxSetalarmTxtHeadline.Size = new System.Drawing.Size(962, 20);
+            this.textBoxSetalarmTxtHeadline.TabIndex = 1;
+            this.textBoxSetalarmTxtHeadline.Text = "Displayed Alarm Text";
+            this.textBoxSetalarmTxtHeadline.TextChanged += new System.EventHandler(this.textBoxSetalarmTxt0_TextChanged);
+            // 
+            // textBoxSetalarmNum0
+            // 
+            this.textBoxSetalarmNum0.Location = new System.Drawing.Point(3, 25);
+            this.textBoxSetalarmNum0.MinimumSize = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNum0.Name = "textBoxSetalarmNum0";
+            this.textBoxSetalarmNum0.Size = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNum0.TabIndex = 2;
+            this.textBoxSetalarmNum0.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
+            // 
+            // textBoxSetalarmTxt0
+            // 
+            this.textBoxSetalarmTxt0.Location = new System.Drawing.Point(105, 25);
+            this.textBoxSetalarmTxt0.MinimumSize = new System.Drawing.Size(300, 20);
+            this.textBoxSetalarmTxt0.Name = "textBoxSetalarmTxt0";
+            this.textBoxSetalarmTxt0.Size = new System.Drawing.Size(962, 20);
+            this.textBoxSetalarmTxt0.TabIndex = 3;
+            this.textBoxSetalarmTxt0.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
+            // 
+            // textBoxSetalarmNum1
+            // 
+            this.textBoxSetalarmNum1.Location = new System.Drawing.Point(3, 47);
+            this.textBoxSetalarmNum1.MinimumSize = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNum1.Name = "textBoxSetalarmNum1";
+            this.textBoxSetalarmNum1.Size = new System.Drawing.Size(100, 20);
+            this.textBoxSetalarmNum1.TabIndex = 4;
+            this.textBoxSetalarmNum1.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
+            // 
+            // textBoxSetalarmTxt1
+            // 
+            this.textBoxSetalarmTxt1.Location = new System.Drawing.Point(105, 47);
+            this.textBoxSetalarmTxt1.MinimumSize = new System.Drawing.Size(300, 20);
+            this.textBoxSetalarmTxt1.Name = "textBoxSetalarmTxt1";
+            this.textBoxSetalarmTxt1.Size = new System.Drawing.Size(962, 20);
+            this.textBoxSetalarmTxt1.TabIndex = 5;
+            this.textBoxSetalarmTxt1.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
+            // 
             // TextGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1081, 636);
+            this.ClientSize = new System.Drawing.Size(815, 636);
             this.Controls.Add(this.Import);
             this.Controls.Add(this.Export);
             this.Controls.Add(this.Translate);
@@ -288,6 +386,8 @@
             this.tabControl1.ResumeLayout(false);
             this.PLCAlarmText.ResumeLayout(false);
             this.CycleAlarms.ResumeLayout(false);
+            this.tableLayoutSetalarm.ResumeLayout(false);
+            this.tableLayoutSetalarm.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -315,6 +415,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutSetalarm;
+        private System.Windows.Forms.TextBox textBoxSetalarmNumHeadline;
+        private System.Windows.Forms.TextBox textBoxSetalarmTxtHeadline;
+        private System.Windows.Forms.TextBox textBoxSetalarmNum0;
+        private System.Windows.Forms.TextBox textBoxSetalarmTxt0;
+        private System.Windows.Forms.TextBox textBoxSetalarmNum1;
+        private System.Windows.Forms.TextBox textBoxSetalarmTxt1;
     }
 }

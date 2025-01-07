@@ -31,5 +31,29 @@ namespace NppDemo.Forms
         {
 
         }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void textBoxSetalarmTxt0_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxSetalarm_TextChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Notepad Textgenerator Text Changed", "Text Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //tableLayoutSetalarm.
+            switch (tableLayoutSetalarm.GetColumn(tableLayoutSetalarm))
+            {
+                case 0:
+                   // if (tableLayoutSetalarm.)
+                    break;
+
+
+            }
+        }
     }
 }
