@@ -993,3 +993,11 @@ class Setal
 
 
 }
+
+public class MessagesList
+{
+    public int MessageID { get; set; }
+    public string MessageTransEng { get; set; }
+    //public string MessageTransDeu { get; set; }
+
+}
