@@ -141,13 +141,23 @@ namespace NppDemo.Forms
                         }
                         if (!skipAddLanguage)
                         {
-                            for (int intRows = 0; intRows < numRowMax; intRows++)
+                            //Get Row numbers without the translation lines
+                            int GetRealLanguageLineNumber = 0;
+                            for (int i = 0; i<numRowMax; i++)
+                            {
+                                if(dataGridViewMSG.Rows[i].Cells[0].ReadOnly != true)
+                                {
+                                    GetRealLanguageLineNumber++;
+                                }
+                            }
+
+
+                            for (int intDefaulLanguageRow = 0; intDefaulLanguageRow < GetRealLanguageLineNumber; intDefaulLanguageRow++)
                             {
 
                                 for (int addRow = 1; addRow <= numLanguagesSelected; addRow++)
                                 {
-                                    dataGridViewMSG.Rows.Insert(intRows * (numLanguagesSelected + 1) + addRow);
-
+                                    //Get new Language from ticked checkbox
                                     int getTextCounter = 0;
                                     string writeLangText = "";
                                     for (int getText = 0; getText < checkedListBoxLanguage.Items.Count; getText++)
@@ -163,12 +173,54 @@ namespace NppDemo.Forms
 
                                         }
                                     }
+                                    //Scan Table for already used langues lines
+                                    bool LanguageLineIsNew = true;
+                                    int intLastSearchRow = 0;
+                                    //if ((numRowMax - numLanguagesSelected) > intDefaulLanguageRow) //Hier ist vermutlich irgendwo der Fehler
 
-                                    dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].Value = writeLangText;
-                                    dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ReadOnly = true;
-                                    dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[0].Value;
-                                    dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].Value = dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
-                                    dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
+                                    if ((numLanguagesSelected* (intDefaulLanguageRow + 1)) < numRowMax) //Hier ist vermutlich irgendwo der Fehler
+                                    {
+                                        intLastSearchRow = numLanguagesSelected *(intDefaulLanguageRow  + 1);
+                                        //intLastSearchRow = intDefaulLanguageRow + numLanguagesSelected;
+                                    }
+                                    else
+                                    {
+                                        //intLastSearchRow = numRowMax - intRows- 1;
+                                        intLastSearchRow = numRowMax;
+                                    }
+
+                                    for (int SearchRows = intDefaulLanguageRow; SearchRows <= intLastSearchRow; SearchRows++)
+                                    {
+                                        string ThisCellValue = dataGridViewMSG.Rows[SearchRows].Cells[0].Value.ToString();
+                                        if (writeLangText == ThisCellValue)
+                                        {
+                                            LanguageLineIsNew = false;
+                                        }
+                                    }
+
+                                    //if the new ticked Language is not existing in Table add the line
+                                    if (LanguageLineIsNew)
+                                    {                                     
+                                        dataGridViewMSG.Rows.Insert(intDefaulLanguageRow * numLanguagesSelected + addRow);
+
+
+                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].Value = writeLangText;
+                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].ReadOnly = true;
+                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[0].Value;
+                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[1].Value = dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[1].Value;
+                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[1].Value;
+                                        /*
+                                        dataGridViewMSG.Rows.Insert(intRows * (numLanguagesSelected + 1) + addRow);
+
+
+                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].Value = writeLangText;
+                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ReadOnly = true;
+                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[0].Value;
+                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].Value = dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
+                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
+                                        */
+
+                                    }
                                 }
 
                             }
