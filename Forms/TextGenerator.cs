@@ -47,12 +47,10 @@ namespace NppDemo.Forms
             {                
                 checkedItems[i] = checkedListBoxLanguage.GetItemChecked(i);
                 PreCheckedItems[i] = checkedListBoxLanguage.GetItemChecked(i);
-                if (checkedListBoxLanguage.GetItemChecked(i))
-                {
-                    numLanguagesSelected++;
-                }
             }
             //minus 1 for default language English
+            //numLanguagesSelected = checkedListBoxLanguage.Items.Count;
+            numLanguagesSelected = checkedListBoxLanguage.CheckedItems.Count;
             numLanguagesSelected = numLanguagesSelected - 1;
             numLanguagesSelectedOld = numLanguagesSelected;
 
@@ -64,6 +62,142 @@ namespace NppDemo.Forms
         }
 
         private void UpdateSelectedLanguages()
+        {
+            string ThisLanguageHasChanged = "";
+            int indexLangaugeAdded = 0;
+
+            //Select English as default always
+            if (checkedListBoxLanguage.GetItemChecked(0))
+            {
+                checkedListBoxLanguage.SetItemChecked(0, true);
+            }
+            else
+            {
+                checkedListBoxLanguage.SetItemChecked(0, true);
+            }
+            //Get all selected Languages
+            for (int i = 0; i < checkedListBoxLanguage.Items.Count; i++)
+            {
+                if (checkedListBoxLanguage.GetItemChecked(i))
+                {
+                    checkedItems[i] = true;
+                }
+                else
+                {
+                    checkedItems[i] = false;
+                }
+                //MessageBox.Show($"checkedItems[{i}]: {checkedItems[i]}", "Languages", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            bool IsDifferent = false;
+            //check if Language Selection has changed
+            for (int j = 0; j < checkedListBoxLanguage.Items.Count; j++)
+            {
+                if (checkedItems[j] != PreCheckedItems[j])
+                {
+                    IsDifferent = true;
+                    ThisLanguageHasChanged = checkedListBoxLanguage.Items[j].ToString();
+                    indexLangaugeAdded = j;
+                }
+                PreCheckedItems[j] = checkedItems[j];
+            }
+            if (IsDifferent)
+            {
+                //Check Language and add a additional Line for each selected Language
+                //MSG Section
+                //------------------------------------------------------------------------------------------------
+                if (tabControlSinumerik.SelectedTab.Name == "Messages")
+                {
+                    //numLanguagesSelected = checkedListBoxLanguage.Items.Count;
+                    numLanguagesSelected = checkedListBoxLanguage.CheckedItems.Count;
+
+                    //minus 1 for default language English
+                    numLanguagesSelected = numLanguagesSelected - 1;
+                    int numRowMax = dataGridViewMSG.RowCount - 1;
+
+                    //Language has been added
+                    if ((numLanguagesSelected > numLanguagesSelectedOld) && (numLanguagesSelected > 0))
+                    {                        
+                        //Pre Check if Language might already exists
+                        int preCheckLanguage = 0;
+                        if (numRowMax > numLanguagesSelected)
+                        {
+                            preCheckLanguage = numLanguagesSelected;
+                        }
+                        else
+                        {
+                            preCheckLanguage = numRowMax;
+                        }
+                        bool skipAddLanguage = false;
+                        for (int i = 0; i < preCheckLanguage; i++)
+                        {
+                            string ThisRowsValue = dataGridViewMSG.Rows[i].Cells[0].Value.ToString();
+                            if (ThisLanguageHasChanged == ThisRowsValue)
+                            {
+                                skipAddLanguage = true;
+                            }
+                        }
+                        if (!skipAddLanguage)
+                        {
+                            //Get new Language from ticked checkbox
+                            int getTextCounter = 0;
+                            string writeLangText = "";
+                            for (int getText = 0; getText < checkedListBoxLanguage.Items.Count; getText++)
+                            {
+                                if (checkedListBoxLanguage.GetItemChecked(getText))
+                                {
+                                    getTextCounter++;
+                                    if (getTextCounter == numLanguagesSelected + 1)
+                                    {                                        
+                                        writeLangText = checkedListBoxLanguage.Items[getText].ToString();
+                                    }
+
+                                }
+                            }
+                            writeLangText = checkedListBoxLanguage.Items[indexLangaugeAdded].ToString();
+                            writeLangText = ThisLanguageHasChanged;
+                            int Rowcounter = 0;
+                            while ( Rowcounter <= (numRowMax - numLanguagesSelected))
+                            {
+                                int addRow = Rowcounter + numLanguagesSelected;
+
+                                dataGridViewMSG.Rows.Insert(addRow);
+
+                                dataGridViewMSG.Rows[addRow].Cells[0].Value = writeLangText;
+                                dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly = true;
+                                dataGridViewMSG.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[Rowcounter].Cells[0].Value;
+                                dataGridViewMSG.Rows[addRow].Cells[1].Value = dataGridViewMSG.Rows[Rowcounter].Cells[1].Value;
+                                dataGridViewMSG.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[Rowcounter].Cells[1].Value;
+
+                                numRowMax = dataGridViewMSG.RowCount - 1;
+                                Rowcounter = Rowcounter + numLanguagesSelected+1; 
+                            }
+                           
+
+                        }
+
+                        //MessageBox.Show($"Selected Languages: {dataGridViewMSG.RowCount}", "Languages", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if ((numLanguagesSelected < numLanguagesSelectedOld))
+                    {
+                        
+                        for (int intRows = numRowMax - 1; intRows > 0; intRows--)
+                        {
+                            string CheckForDeleteRow = dataGridViewMSG.Rows[intRows].Cells[0].Value.ToString();
+
+                            if (CheckForDeleteRow == ThisLanguageHasChanged)
+                            {
+                                dataGridViewMSG.Rows.RemoveAt(intRows);
+                            }
+                        }
+                    }
+                }
+            }
+
+            
+            numLanguagesSelectedOld = numLanguagesSelected;
+        }
+
+        private void oldUpdateSelectedLanguages()
         {
             string ThisLanguageHasChanged = "";
 
@@ -107,14 +241,8 @@ namespace NppDemo.Forms
                 //------------------------------------------------------------------------------------------------
                 if (tabControlSinumerik.SelectedTab.Name == "Messages")
                 {
-                    numLanguagesSelected = 0;
-                    for (int i = 0; i < checkedListBoxLanguage.Items.Count; i++)
-                    {
-                        if (checkedListBoxLanguage.GetItemChecked(i))
-                        {
-                            numLanguagesSelected++;
-                        }
-                    }
+                    numLanguagesSelected = checkedListBoxLanguage.Items.Count;
+                    
                     //minus 1 for default language English
                     numLanguagesSelected = numLanguagesSelected - 1;
                     if ((numLanguagesSelected > numLanguagesSelectedOld) && (numLanguagesSelected > 0))

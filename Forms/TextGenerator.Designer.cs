@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Item 1",
             "subitem"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem("Item2");
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("item3");
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Item2");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("item3");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "item4",
             "subitem1",
             "subitem2"}, -1);
@@ -124,10 +124,10 @@
             this.columnHeader4});
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4});
             this.listView1.Location = new System.Drawing.Point(-4, 0);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(1081, 503);
@@ -357,7 +357,9 @@
             this.checkedListBoxLanguage.Name = "checkedListBoxLanguage";
             this.checkedListBoxLanguage.Size = new System.Drawing.Size(116, 109);
             this.checkedListBoxLanguage.TabIndex = 5;
+            this.checkedListBoxLanguage.Click += new System.EventHandler(this.LangCheckBoxItemChange);
             this.checkedListBoxLanguage.SelectedValueChanged += new System.EventHandler(this.LangCheckBoxItemChange);
+            this.checkedListBoxLanguage.MouseLeave += new System.EventHandler(this.LangCheckBoxItemChange);
             // 
             // writeTextfile
             // 
