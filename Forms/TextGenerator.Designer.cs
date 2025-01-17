@@ -28,30 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Item 1",
-            "subitem"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Item2");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("item3");
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
-            "item4",
-            "subitem1",
-            "subitem2"}, -1);
             this.tabControlSinumerik = new System.Windows.Forms.TabControl();
-            this.PLCAlarmText = new System.Windows.Forms.TabPage();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CycleAlarms = new System.Windows.Forms.TabPage();
-            this.tableLayoutSetalarm = new System.Windows.Forms.TableLayoutPanel();
-            this.textBoxSetalarmTxt1 = new System.Windows.Forms.TextBox();
-            this.textBoxSetalarmNum1 = new System.Windows.Forms.TextBox();
-            this.textBoxSetalarmNumHeadline = new System.Windows.Forms.TextBox();
-            this.textBoxSetalarmTxtHeadline = new System.Windows.Forms.TextBox();
-            this.textBoxSetalarmNum0 = new System.Windows.Forms.TextBox();
-            this.textBoxSetalarmTxt0 = new System.Windows.Forms.TextBox();
             this.Messages = new System.Windows.Forms.TabPage();
             this.dataGridViewMSG = new System.Windows.Forms.DataGridView();
             this.RunMyScreen = new System.Windows.Forms.TabPage();
@@ -76,10 +54,8 @@
             this.folderBrowserDialogSinumerikProject = new System.Windows.Forms.FolderBrowserDialog();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.PLCAlarmText = new System.Windows.Forms.TabPage();
             this.tabControlSinumerik.SuspendLayout();
-            this.PLCAlarmText.SuspendLayout();
-            this.CycleAlarms.SuspendLayout();
-            this.tableLayoutSetalarm.SuspendLayout();
             this.Messages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMSG)).BeginInit();
             this.SuspendLayout();
@@ -104,40 +80,8 @@
             this.tabControlSinumerik.TabIndex = 0;
             this.tabControlSinumerik.SelectedIndexChanged += new System.EventHandler(this.DisplayFoldersAndFiles);
             // 
-            // PLCAlarmText
-            // 
-            this.PLCAlarmText.Controls.Add(this.listView1);
-            this.PLCAlarmText.Location = new System.Drawing.Point(4, 22);
-            this.PLCAlarmText.Name = "PLCAlarmText";
-            this.PLCAlarmText.Padding = new System.Windows.Forms.Padding(3);
-            this.PLCAlarmText.Size = new System.Drawing.Size(807, 583);
-            this.PLCAlarmText.TabIndex = 0;
-            this.PLCAlarmText.Text = "PLC Alarm Text";
-            this.PLCAlarmText.UseVisualStyleBackColor = true;
-            // 
-            // listView1
-            // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
-            this.listView1.HideSelection = false;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
-            this.listView1.Location = new System.Drawing.Point(-4, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1081, 503);
-            this.listView1.TabIndex = 12;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-            // 
             // CycleAlarms
             // 
-            this.CycleAlarms.Controls.Add(this.tableLayoutSetalarm);
             this.CycleAlarms.Location = new System.Drawing.Point(4, 22);
             this.CycleAlarms.Name = "CycleAlarms";
             this.CycleAlarms.Padding = new System.Windows.Forms.Padding(3);
@@ -145,114 +89,6 @@
             this.CycleAlarms.TabIndex = 1;
             this.CycleAlarms.Text = "Cycle Alarms(SETAL)";
             this.CycleAlarms.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutSetalarm
-            // 
-            this.tableLayoutSetalarm.AutoScroll = true;
-            this.tableLayoutSetalarm.ColumnCount = 2;
-            this.tableLayoutSetalarm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
-            this.tableLayoutSetalarm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxt1, 1, 2);
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNum1, 0, 2);
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNumHeadline, 0, 0);
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxtHeadline, 1, 0);
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmNum0, 0, 1);
-            this.tableLayoutSetalarm.Controls.Add(this.textBoxSetalarmTxt0, 1, 1);
-            this.tableLayoutSetalarm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutSetalarm.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutSetalarm.Name = "tableLayoutSetalarm";
-            this.tableLayoutSetalarm.RowCount = 30;
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutSetalarm.Size = new System.Drawing.Size(801, 577);
-            this.tableLayoutSetalarm.TabIndex = 12;
-            this.tableLayoutSetalarm.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
-            // 
-            // textBoxSetalarmTxt1
-            // 
-            this.textBoxSetalarmTxt1.Location = new System.Drawing.Point(105, 47);
-            this.textBoxSetalarmTxt1.MinimumSize = new System.Drawing.Size(300, 20);
-            this.textBoxSetalarmTxt1.Name = "textBoxSetalarmTxt1";
-            this.textBoxSetalarmTxt1.Size = new System.Drawing.Size(962, 20);
-            this.textBoxSetalarmTxt1.TabIndex = 5;
-            this.textBoxSetalarmTxt1.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
-            // 
-            // textBoxSetalarmNum1
-            // 
-            this.textBoxSetalarmNum1.Location = new System.Drawing.Point(3, 47);
-            this.textBoxSetalarmNum1.MinimumSize = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNum1.Name = "textBoxSetalarmNum1";
-            this.textBoxSetalarmNum1.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNum1.TabIndex = 4;
-            this.textBoxSetalarmNum1.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
-            // 
-            // textBoxSetalarmNumHeadline
-            // 
-            this.textBoxSetalarmNumHeadline.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxSetalarmNumHeadline.Enabled = false;
-            this.textBoxSetalarmNumHeadline.Location = new System.Drawing.Point(3, 3);
-            this.textBoxSetalarmNumHeadline.MinimumSize = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNumHeadline.Name = "textBoxSetalarmNumHeadline";
-            this.textBoxSetalarmNumHeadline.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNumHeadline.TabIndex = 0;
-            this.textBoxSetalarmNumHeadline.Text = "Alarm Number";
-            // 
-            // textBoxSetalarmTxtHeadline
-            // 
-            this.textBoxSetalarmTxtHeadline.Enabled = false;
-            this.textBoxSetalarmTxtHeadline.Location = new System.Drawing.Point(105, 3);
-            this.textBoxSetalarmTxtHeadline.MinimumSize = new System.Drawing.Size(300, 20);
-            this.textBoxSetalarmTxtHeadline.Name = "textBoxSetalarmTxtHeadline";
-            this.textBoxSetalarmTxtHeadline.Size = new System.Drawing.Size(962, 20);
-            this.textBoxSetalarmTxtHeadline.TabIndex = 1;
-            this.textBoxSetalarmTxtHeadline.Text = "Displayed Alarm Text";
-            this.textBoxSetalarmTxtHeadline.TextChanged += new System.EventHandler(this.textBoxSetalarmTxt0_TextChanged);
-            // 
-            // textBoxSetalarmNum0
-            // 
-            this.textBoxSetalarmNum0.Location = new System.Drawing.Point(3, 25);
-            this.textBoxSetalarmNum0.MinimumSize = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNum0.Name = "textBoxSetalarmNum0";
-            this.textBoxSetalarmNum0.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSetalarmNum0.TabIndex = 2;
-            this.textBoxSetalarmNum0.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
-            // 
-            // textBoxSetalarmTxt0
-            // 
-            this.textBoxSetalarmTxt0.Location = new System.Drawing.Point(105, 25);
-            this.textBoxSetalarmTxt0.MinimumSize = new System.Drawing.Size(300, 20);
-            this.textBoxSetalarmTxt0.Name = "textBoxSetalarmTxt0";
-            this.textBoxSetalarmTxt0.Size = new System.Drawing.Size(962, 20);
-            this.textBoxSetalarmTxt0.TabIndex = 3;
-            this.textBoxSetalarmTxt0.TextChanged += new System.EventHandler(this.textBoxSetalarm_TextChanged);
             // 
             // Messages
             // 
@@ -277,6 +113,7 @@
             this.dataGridViewMSG.RowTemplate.Height = 24;
             this.dataGridViewMSG.Size = new System.Drawing.Size(812, 589);
             this.dataGridViewMSG.TabIndex = 0;
+            this.dataGridViewMSG.Click += new System.EventHandler(this.DisplayFoldersAndFiles);
             // 
             // RunMyScreen
             // 
@@ -369,6 +206,7 @@
             this.writeTextfile.TabIndex = 6;
             this.writeTextfile.Text = "Write to Textfile";
             this.writeTextfile.UseVisualStyleBackColor = true;
+            this.writeTextfile.Click += new System.EventHandler(this.writeTextfile_Click);
             // 
             // HelpPreview
             // 
@@ -510,6 +348,16 @@
             this.textBox1.Size = new System.Drawing.Size(317, 20);
             this.textBox1.TabIndex = 20;
             // 
+            // PLCAlarmText
+            // 
+            this.PLCAlarmText.Location = new System.Drawing.Point(4, 22);
+            this.PLCAlarmText.Name = "PLCAlarmText";
+            this.PLCAlarmText.Padding = new System.Windows.Forms.Padding(3);
+            this.PLCAlarmText.Size = new System.Drawing.Size(807, 583);
+            this.PLCAlarmText.TabIndex = 0;
+            this.PLCAlarmText.Text = "PLC Alarm Text";
+            this.PLCAlarmText.UseVisualStyleBackColor = true;
+            // 
             // TextGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -535,10 +383,6 @@
             this.Name = "TextGenerator";
             this.Text = "TextGenerator";
             this.tabControlSinumerik.ResumeLayout(false);
-            this.PLCAlarmText.ResumeLayout(false);
-            this.CycleAlarms.ResumeLayout(false);
-            this.tableLayoutSetalarm.ResumeLayout(false);
-            this.tableLayoutSetalarm.PerformLayout();
             this.Messages.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMSG)).EndInit();
             this.ResumeLayout(false);
@@ -549,7 +393,6 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControlSinumerik;
-        private System.Windows.Forms.TabPage PLCAlarmText;
         private System.Windows.Forms.TabPage CycleAlarms;
         private System.Windows.Forms.TabPage Messages;
         private System.Windows.Forms.TabPage RunMyScreen;
@@ -564,18 +407,6 @@
         private System.Windows.Forms.Button Translate;
         private System.Windows.Forms.Button Export;
         private System.Windows.Forms.Button Import;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutSetalarm;
-        private System.Windows.Forms.TextBox textBoxSetalarmNumHeadline;
-        private System.Windows.Forms.TextBox textBoxSetalarmTxtHeadline;
-        private System.Windows.Forms.TextBox textBoxSetalarmNum0;
-        private System.Windows.Forms.TextBox textBoxSetalarmTxt0;
-        private System.Windows.Forms.TextBox textBoxSetalarmNum1;
-        private System.Windows.Forms.TextBox textBoxSetalarmTxt1;
         private System.Windows.Forms.DataGridView dataGridViewMSG;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBoxProjectFolder;
@@ -587,5 +418,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialogSinumerikProject;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TabPage PLCAlarmText;
     }
 }

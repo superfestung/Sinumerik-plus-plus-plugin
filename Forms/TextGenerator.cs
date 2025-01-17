@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace NppDemo.Forms
 {
@@ -179,7 +180,7 @@ namespace NppDemo.Forms
                     }
                     else if ((numLanguagesSelected < numLanguagesSelectedOld))
                     {
-                        
+                        //dataGridViewMSG.Rows[0].Cells[0].Selected = true;
                         for (int intRows = numRowMax - 1; intRows > 0; intRows--)
                         {
                             string CheckForDeleteRow = dataGridViewMSG.Rows[intRows].Cells[0].Value.ToString();
@@ -197,185 +198,7 @@ namespace NppDemo.Forms
             numLanguagesSelectedOld = numLanguagesSelected;
         }
 
-        private void oldUpdateSelectedLanguages()
-        {
-            string ThisLanguageHasChanged = "";
-
-            //Select English as default always
-            if (checkedListBoxLanguage.GetItemChecked(0))
-            {
-                checkedListBoxLanguage.SetItemChecked(0, true);
-            }
-            else
-            {
-                checkedListBoxLanguage.SetItemChecked(0, true);
-            }
-            //Get all selected Languages
-            for (int i = 0; i < checkedListBoxLanguage.Items.Count; i++)
-            {
-                if (checkedListBoxLanguage.GetItemChecked(i))
-                {
-                    checkedItems[i] = true;                    
-                }
-                else
-                {
-                    checkedItems[i] = false;
-                }
-                //MessageBox.Show($"checkedItems[{i}]: {checkedItems[i]}", "Languages", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            bool IsDifferent = false;
-            //check if Language Selection has changed
-            for (int j = 0; j < checkedListBoxLanguage.Items.Count; j++)
-            {
-                if (checkedItems[j] != PreCheckedItems[j])
-                {
-                    IsDifferent = true;
-                    ThisLanguageHasChanged = checkedListBoxLanguage.Items[j].ToString();                
-                }
-                PreCheckedItems[j] = checkedItems[j];
-            }
-            if (IsDifferent)                
-            {
-                //Check Language and add a additional Line for each selected Language
-                //MSG Section
-                //------------------------------------------------------------------------------------------------
-                if (tabControlSinumerik.SelectedTab.Name == "Messages")
-                {
-                    numLanguagesSelected = checkedListBoxLanguage.Items.Count;
-                    
-                    //minus 1 for default language English
-                    numLanguagesSelected = numLanguagesSelected - 1;
-                    if ((numLanguagesSelected > numLanguagesSelectedOld) && (numLanguagesSelected > 0))
-                    {
-                        int numRowMax = dataGridViewMSG.RowCount - 1;
-                        //Pre Check if Language might already exists
-                        int preCheckLanguage = 0;
-                        if (numRowMax> numLanguagesSelected)
-                        {
-                            preCheckLanguage = numLanguagesSelected;
-                        }
-                        else
-                        {
-                            preCheckLanguage = numRowMax;
-                        }
-                        bool skipAddLanguage = false;
-                        for (int i = 0;i < preCheckLanguage; i++)
-                        {
-                            string ThisRowsValue = dataGridViewMSG.Rows[i].Cells[0].Value.ToString();
-                            if (ThisLanguageHasChanged == ThisRowsValue)                                
-                            {
-                                skipAddLanguage = true;
-                            }
-                        }
-                        if (!skipAddLanguage)
-                        {
-                            //Get Row numbers without the translation lines
-                            int GetRealLanguageLineNumber = 0;
-                            for (int i = 0; i<numRowMax; i++)
-                            {
-                                if(dataGridViewMSG.Rows[i].Cells[0].ReadOnly != true)
-                                {
-                                    GetRealLanguageLineNumber++;
-                                }
-                            }
-
-
-                            for (int intDefaulLanguageRow = 0; intDefaulLanguageRow < GetRealLanguageLineNumber; intDefaulLanguageRow++)
-                            {
-
-                                for (int addRow = 1; addRow <= numLanguagesSelected; addRow++)
-                                {
-                                    //Get new Language from ticked checkbox
-                                    int getTextCounter = 0;
-                                    string writeLangText = "";
-                                    for (int getText = 0; getText < checkedListBoxLanguage.Items.Count; getText++)
-                                    {
-                                        if (checkedListBoxLanguage.GetItemChecked(getText))
-                                        {
-                                            getTextCounter++;
-                                            if (getTextCounter == addRow + 1)
-                                            {
-                                                //writeLangText = checkedListBoxLanguage.GetItemText(getText);
-                                                writeLangText = checkedListBoxLanguage.Items[getText].ToString();
-                                            }
-
-                                        }
-                                    }
-                                    //Scan Table for already used langues lines
-                                    bool LanguageLineIsNew = true;
-                                    int intLastSearchRow = 0;
-                                    //if ((numRowMax - numLanguagesSelected) > intDefaulLanguageRow) //Hier ist vermutlich irgendwo der Fehler
-
-                                    if ((numLanguagesSelected* (intDefaulLanguageRow + 1)) < numRowMax) //Hier ist vermutlich irgendwo der Fehler
-                                    {
-                                        intLastSearchRow = numLanguagesSelected *(intDefaulLanguageRow  + 1);
-                                        //intLastSearchRow = intDefaulLanguageRow + numLanguagesSelected;
-                                    }
-                                    else
-                                    {
-                                        //intLastSearchRow = numRowMax - intRows- 1;
-                                        intLastSearchRow = numRowMax;
-                                    }
-
-                                    for (int SearchRows = intDefaulLanguageRow; SearchRows <= intLastSearchRow; SearchRows++)
-                                    {
-                                        string ThisCellValue = dataGridViewMSG.Rows[SearchRows].Cells[0].Value.ToString();
-                                        if (writeLangText == ThisCellValue)
-                                        {
-                                            LanguageLineIsNew = false;
-                                        }
-                                    }
-
-                                    //if the new ticked Language is not existing in Table add the line
-                                    if (LanguageLineIsNew)
-                                    {                                     
-                                        dataGridViewMSG.Rows.Insert(intDefaulLanguageRow * numLanguagesSelected + addRow);
-
-
-                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].Value = writeLangText;
-                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].ReadOnly = true;
-                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[0].Value;
-                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[1].Value = dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[1].Value;
-                                        dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected + addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[intDefaulLanguageRow * numLanguagesSelected].Cells[1].Value;
-                                        /*
-                                        dataGridViewMSG.Rows.Insert(intRows * (numLanguagesSelected + 1) + addRow);
-
-
-                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].Value = writeLangText;
-                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ReadOnly = true;
-                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[0].Value;
-                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].Value = dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
-                                        dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1) + addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[intRows * (numLanguagesSelected + 1)].Cells[1].Value;
-                                        */
-
-                                    }
-                                }
-
-                            }
-
-                        }
-
-                        //MessageBox.Show($"Selected Languages: {dataGridViewMSG.RowCount}", "Languages", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else if ((numLanguagesSelected < numLanguagesSelectedOld))
-                    {
-                        int numRowMax = dataGridViewMSG.RowCount - 1;
-                        for (int intRows = numRowMax-1; intRows > 0 ; intRows--)
-                        {
-                            string CheckForDeleteRow = dataGridViewMSG.Rows[intRows].Cells[0].Value.ToString();
-
-                            if (CheckForDeleteRow == ThisLanguageHasChanged)
-                            {
-                                dataGridViewMSG.Rows.RemoveAt(intRows);
-                            }                           
-                        }
-                    }
-                }
-            }
-
-            //Store the number of selected Languages in numLanguagesSelectedOld
-            numLanguagesSelectedOld = numLanguagesSelected;
-        }
+       
 
         private List<MessagesList> GetMessages()
         {
@@ -388,46 +211,7 @@ namespace NppDemo.Forms
             return MSGlist;
 
         }
-        private void MoreMessages()
-        {
-            //throw new NotImplementedException();
-            //var MSGlist = new List<MessagesList>();
-            //MSGlist.Add(new MessagesList() { MessageID = 11, MessageTransEng = "Text English 11" });
-
-            //MSGmessages.Add(MSGmessages(){ MessageID = 11,MessageTransEng = "Text English 11"});
-            MSGmessages.Insert(3, new MessagesList() { MessageID = 11, MessageTransEng = "Text English 11" });
-
-
-            //return MSGlist;
-
-        }
-
-
-        private void MSGList_Form_Load(object sender, EventArgs e)
-        {
-            //this.MSGmessages = 
-                
-            //this.MSGmessages = GetMessages();
-
-            //var MSGmessages = this.MSGmessages;
-            dataGridViewMSG.ColumnCount = 2;
-            dataGridViewMSG.RowCount = 2;
-            dataGridViewMSG.Columns[0].Name = "Message ID";
-            dataGridViewMSG.Columns[1].Name = "MSG Text";
-            
-            //dataGridViewMSG.DataSource = MSGmessages;
-            dataGridViewMSG.AllowUserToAddRows = true;
-            //dataGridViewMSG.Columns["MessageID"].Name = "Message ID";
-            //dataGridViewMSG.Columns["MessageID"].DataPropertyName = "Message ID"; 
-            //dataGridViewMSG.Columns[0].Name = "Message ID";
-            // column.H
-            //dataGridViewMSG.Columns["MessageTransEng"].Name = "MSG Text";
-
-            //MoreMessages();
-            //dataGridViewMSG.Refresh();
-            //dataGridViewMSG.DataSource = MSGmessages;
-            //dataGridViewMSG.Rows.Add(MSGmessages);
-        }
+ 
         private void MSGList_Initialize()
         {
             //this.MSGmessages = 
@@ -456,14 +240,6 @@ namespace NppDemo.Forms
             //dataGridViewMSG.Rows.Add(MSGmessages);
         }
 
-        private void MSGList_Form_AddRow(object sender, EventArgs e)
-        {
-
-            //dataGridViewMSG.SelectedCells.Contains();
-            //if (dataGridViewMSG.SelectedRows[0] == dataGridViewMSG.RowCount) 
-            //dataGridViewMSG.RowCount = dataGridViewMSG.RowCount + 1;
-
-        }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -485,19 +261,7 @@ namespace NppDemo.Forms
 
         }
 
-        private void textBoxSetalarm_TextChanged(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Notepad Textgenerator Text Changed", "Text Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //tableLayoutSetalarm.
-            switch (tableLayoutSetalarm.GetColumn(tableLayoutSetalarm))
-            {
-                case 0:
-                   // if (tableLayoutSetalarm.)
-                    break;
 
-
-            }
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -524,8 +288,20 @@ namespace NppDemo.Forms
         }
         private void UpdateFoldersAndFiles()
         {
-
             string strLanguage = "eng";
+            if (tabControlSinumerik.SelectedTab.Name == "Messages")
+            {
+                if (dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].ReadOnly)
+                {
+                    strLanguage = dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].Value.ToString();
+                }
+                else
+                {
+                    strLanguage = "eng";
+                }
+            }
+                
+
             switch (tabControlSinumerik.SelectedTab.Name)
             {
                 case "PLCAlarmText":
@@ -585,5 +361,55 @@ namespace NppDemo.Forms
         {
             //CheckSelectedLanguages();
         }
+
+        private void writeTextfile_Click(object sender, EventArgs e)
+        {
+            CreateOutputFile();
+        }
+
+        private void CreateOutputFile()
+        {
+            if (SinumerikProjectFolder == "")
+            {
+                MessageBox.Show("Create a Sinumerik Project First!", "Project is Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            else
+            {
+                string outputfile = SinumerikProjectFolder + "/" + textBoxSourceFile.Text;
+                //MessageBox.Show($"I write xml here: {outputfile}","Here is the Output", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.Indent = true;
+                //settings.IndentChars = ("   ");
+                settings.OmitXmlDeclaration = true;
+                //settings.ConformanceLevel = ConformanceLevel.Fragment;
+                settings.NewLineOnAttributes = true;
+
+
+                int numRowMax = dataGridViewMSG.RowCount - 1;
+
+                using (XmlWriter writer = XmlWriter.Create(outputfile,settings))                  
+                {
+                    writer.WriteDocType("TS",null,null,null);
+                    writer.WriteStartElement("TS");
+                    writer.WriteStartElement("context");
+                    writer.WriteElementString("name", "partprogmsg01");
+
+                    for (int i = 0; i <= numRowMax; i++)
+                    {
+                        writer.WriteStartElement("message");
+                        writer.WriteElementString("source", dataGridViewMSG.Rows[i].Cells[0].Value.ToString());
+                        writer.WriteElementString("translation", dataGridViewMSG.Rows[i].Cells[1].Value.ToString());
+                        writer.WriteEndElement();
+                    }                    
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                    writer.Flush();
+                }
+            }
+        }
+
     }
 }
