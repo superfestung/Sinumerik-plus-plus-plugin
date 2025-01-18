@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tabControlSinumerik = new System.Windows.Forms.TabControl();
+            this.PLCAlarmText = new System.Windows.Forms.TabPage();
             this.CycleAlarms = new System.Windows.Forms.TabPage();
             this.Messages = new System.Windows.Forms.TabPage();
             this.dataGridViewMSG = new System.Windows.Forms.DataGridView();
@@ -54,7 +55,6 @@
             this.folderBrowserDialogSinumerikProject = new System.Windows.Forms.FolderBrowserDialog();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.PLCAlarmText = new System.Windows.Forms.TabPage();
             this.tabControlSinumerik.SuspendLayout();
             this.Messages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMSG)).BeginInit();
@@ -79,6 +79,16 @@
             this.tabControlSinumerik.Size = new System.Drawing.Size(815, 609);
             this.tabControlSinumerik.TabIndex = 0;
             this.tabControlSinumerik.SelectedIndexChanged += new System.EventHandler(this.DisplayFoldersAndFiles);
+            // 
+            // PLCAlarmText
+            // 
+            this.PLCAlarmText.Location = new System.Drawing.Point(4, 22);
+            this.PLCAlarmText.Name = "PLCAlarmText";
+            this.PLCAlarmText.Padding = new System.Windows.Forms.Padding(3);
+            this.PLCAlarmText.Size = new System.Drawing.Size(807, 583);
+            this.PLCAlarmText.TabIndex = 0;
+            this.PLCAlarmText.Text = "PLC Alarm Text";
+            this.PLCAlarmText.UseVisualStyleBackColor = true;
             // 
             // CycleAlarms
             // 
@@ -225,6 +235,7 @@
             this.SourceCode.TabIndex = 8;
             this.SourceCode.Text = "Source Code";
             this.SourceCode.UseVisualStyleBackColor = true;
+            this.SourceCode.Click += new System.EventHandler(this.SourceCode_Click);
             // 
             // Translate
             // 
@@ -234,6 +245,7 @@
             this.Translate.TabIndex = 9;
             this.Translate.Text = "Translate";
             this.Translate.UseVisualStyleBackColor = true;
+            this.Translate.Click += new System.EventHandler(this.Translate_Click);
             // 
             // Export
             // 
@@ -347,16 +359,6 @@
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(317, 20);
             this.textBox1.TabIndex = 20;
-            // 
-            // PLCAlarmText
-            // 
-            this.PLCAlarmText.Location = new System.Drawing.Point(4, 22);
-            this.PLCAlarmText.Name = "PLCAlarmText";
-            this.PLCAlarmText.Padding = new System.Windows.Forms.Padding(3);
-            this.PLCAlarmText.Size = new System.Drawing.Size(807, 583);
-            this.PLCAlarmText.TabIndex = 0;
-            this.PLCAlarmText.Text = "PLC Alarm Text";
-            this.PLCAlarmText.UseVisualStyleBackColor = true;
             // 
             // TextGenerator
             // 

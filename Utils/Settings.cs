@@ -2,6 +2,7 @@
 using CsvQuery.PluginInfrastructure;
 using Kbg.NppPluginNET;
 using Kbg.NppPluginNET.PluginInfrastructure;
+using NppDemo.Forms;
 
 namespace NppDemo.Utils
 {
@@ -37,10 +38,20 @@ namespace NppDemo.Utils
             Category("Styling"), DefaultValue(true)]
         public bool use_npp_styling { get; set; }
         #endregion
-        #region TESTING
+        #region SinumerikPPProject
+        [Description("Settings for Sinumerik++ Projects. Root Folder and more to follow"),
+            Category("Sinumerik++ Project"), DefaultValue("")]
+        //Category("Sinumerik++ Project"), DefaultValue(NppDemo.Forms.TextGenerator.SinumerikProjectFolder)]
+        //Category("Sinumerik++ Project"), DefaultValue(nppdeemo.TextGenerator.textBoxProjectFolder.Text)]
+        public string SinPPRootFolder { get; set; }
+        #endregion
+
+        /*
+         * #region TESTING
         [Description("Ask before running tests, because the test can hijack the user's clipboard"),
             Category("Testing"), DefaultValue(AskUserWhetherToDoThing.ASK_BEFORE_DOING)]
         public AskUserWhetherToDoThing ask_before_testing { get; set; }
         #endregion
+         */
     }
 }

@@ -8,14 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+//----------
+using Kbg.NppPluginNET;
+using Kbg.NppPluginNET.PluginInfrastructure;
+using NppDemo.Forms;
+using NppDemo.Utils;
+using System.Web;
+using System.Net;
+
 
 namespace NppDemo.Forms
 {
     public partial class TextGenerator : Form
     {
+        public static Settings settings = new Settings();
         public List<MessagesList> MSGmessages {  get; set; }
 
-        public string SinumerikProjectFolder;
+        public static string SinumerikProjectFolder;
         public string SinumerikProjectName;
         //public object preselectedItems;
         public static bool[] checkedItems = {false, false, false, false, false, false, false, false, false, false, false, false, false, false
@@ -265,6 +274,8 @@ namespace NppDemo.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
+             
+            
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
 
@@ -278,6 +289,7 @@ namespace NppDemo.Forms
             }
 
             textBoxProjectFolder.Text = SinumerikProjectFolder;
+            settings.SinPPRootFolder = SinumerikProjectFolder;
         }
 
         private void DisplayFoldersAndFiles(object sender, EventArgs e)
@@ -397,19 +409,59 @@ namespace NppDemo.Forms
                     writer.WriteStartElement("context");
                     writer.WriteElementString("name", "partprogmsg01");
 
-                    for (int i = 0; i <= numRowMax; i++)
+                    foreach (DataGridViewRow row in dataGridViewMSG.Rows)
                     {
-                        writer.WriteStartElement("message");
-                        writer.WriteElementString("source", dataGridViewMSG.Rows[i].Cells[0].Value.ToString());
-                        writer.WriteElementString("translation", dataGridViewMSG.Rows[i].Cells[1].Value.ToString());
-                        writer.WriteEndElement();
-                    }                    
-                    writer.WriteEndElement();
-                    writer.WriteEndElement();
-                    writer.Flush();
+                        if (row.Cells[0].RowIndex < dataGridViewMSG.RowCount-1)
+                        {
+                            writer.WriteStartElement("message");
+                            writer.WriteElementString("source", row.Cells[0].Value.ToString());
+                            writer.WriteElementString("translation", row.Cells[1].Value.ToString());
+                            writer.WriteEndElement();
+                        }
+
+                    }
                 }
             }
         }
 
+        private void SourceCode_Click(object sender, EventArgs e)
+        {
+            string outputfile = SinumerikProjectFolder + "/" + textBoxSourceFile.Text;
+            Npp.notepad.OpenFile(outputfile);
+            //Npp.notepad.GetOpenFileNames
+            Npp.notepad.SetCurrentLanguage(LangType.L_XML);
+            
+        }
+
+        private void Translate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public String translate(String input, string from, string to)
+        {
+            var fromLanguage = from;
+            var toLanguage = to;
+            //var url = $"https://translate.google.com/?sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
+            var url = $"https://translate.googleapis.com/tran...{fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
+            
+            var webclient = new WebClient
+            {
+                Encoding = System.Text.Encoding.UTF8
+            };
+            var result = webclient.DownloadString(url);
+            try
+            {
+                result = result.Substring(4, result.IndexOf("\"", 4
+                    , StringComparison.Ordinal) - 4);
+                return result;
+            }
+            catch (Exception e1)
+            {
+                return "error";
+            }
+
+
+        }
     }
 }

@@ -77,7 +77,8 @@ namespace Kbg.NppPluginNET
             PluginBase.SetCommand(3, "---", null);
             PluginBase.SetCommand(4, "Text Generator", ShowTextGeneratorForm);
             PluginBase.SetCommand(5, "---", null);
-            PluginBase.SetCommand(6, "A&bout", ShowAboutForm); 
+            PluginBase.SetCommand(6, "&Settings", OpenSettings);
+            PluginBase.SetCommand(7, "A&bout", ShowAboutForm); 
 
 
         }
