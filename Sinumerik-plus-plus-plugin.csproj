@@ -127,6 +127,8 @@
     <Compile Include="Forms\TextGenerator.Designer.cs">
       <DependentUpon>TextGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyMemoryResponseModel.cs" />
+    <Compile Include="MyMemoryTranslateEngine.cs" />
     <!-- infrastructure -->
     <Compile Include="PluginInfrastructure\ClikeStringArray.cs" />
     <Compile Include="PluginInfrastructure\DllExport\DllExportAttribute.cs" />
@@ -171,6 +173,11 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net.Http" />

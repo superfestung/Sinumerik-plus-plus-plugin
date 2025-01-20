@@ -15,6 +15,13 @@ using NppDemo.Forms;
 using NppDemo.Utils;
 using System.Web;
 using System.Net;
+//----------------
+using System.Web.UI;
+using nppTranslateCS;
+using System.Runtime.Serialization.Json;
+using System.Web.UI.WebControls.WebParts;
+
+
 
 
 namespace NppDemo.Forms
@@ -23,6 +30,9 @@ namespace NppDemo.Forms
     {
         public static Settings settings = new Settings();
         public List<MessagesList> MSGmessages {  get; set; }
+
+        //public List<pair> ListLang;
+
 
         public static string SinumerikProjectFolder;
         public string SinumerikProjectName;
@@ -223,11 +233,7 @@ namespace NppDemo.Forms
  
         private void MSGList_Initialize()
         {
-            //this.MSGmessages = 
 
-            //this.MSGmessages = GetMessages();
-
-            //var MSGmessages = this.MSGmessages;
             dataGridViewMSG.ColumnCount = 2;
             dataGridViewMSG.RowCount = 2;
             dataGridViewMSG.Columns[0].Name = "Message ID";
@@ -237,16 +243,6 @@ namespace NppDemo.Forms
 
             //dataGridViewMSG.DataSource = MSGmessages;
             dataGridViewMSG.AllowUserToAddRows = true;
-            //dataGridViewMSG.Columns["MessageID"].Name = "Message ID";
-            //dataGridViewMSG.Columns["MessageID"].DataPropertyName = "Message ID"; 
-            //dataGridViewMSG.Columns[0].Name = "Message ID";
-            // column.H
-            //dataGridViewMSG.Columns["MessageTransEng"].Name = "MSG Text";
-
-            //MoreMessages();
-            //dataGridViewMSG.Refresh();
-            //dataGridViewMSG.DataSource = MSGmessages;
-            //dataGridViewMSG.Rows.Add(MSGmessages);
         }
 
 
@@ -432,38 +428,44 @@ namespace NppDemo.Forms
             Npp.notepad.SetCurrentLanguage(LangType.L_XML);
             
         }
-
+       
         private void Translate_Click(object sender, EventArgs e)
         {
+            string[] SinuLang = { "chs", "cht", "csy", "dan", "nld", "eng", "fin", "fra", "deu", "hun", "ind", "ita", "jpn", "kor", "msl", "plk", "ptb", "rom", "rus", "sky", "slv", "esp", "sve", "tha", "trk", "vit" };
+
+            string[] MyMemLang = { "zh-CHS", "zh-CHT", "cs", "da", "nl", "en", "fi", "fr", "de", "hu", "id", "it", "ja", "ko", "ms", "pl", "pt", "ro", "ru", "sk", "sl", "es", "sv", "th", "tr", "vi" };
+
             int addRow = dataGridViewMSG.CurrentCell.RowIndex;
-            dataGridViewMSG.Rows[addRow].Cells[1].Value = translate(dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString(), "en", "de");
+            //dataGridViewMSG.Rows[addRow].Cells[1].Value = TranslateMyMem( "en", "de", (dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()));
+
+            string FromLang = "en";
+            string ToLang = "en";
+
+            MyMemoryTranslateEngine myMemoryTranslateEngine = new MyMemoryTranslateEngine();
+            if (dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly)
+            {
+                ToLang = dataGridViewMSG.Rows[addRow].Cells[0].Value.ToString();
+                //myMemoryTranslateEngine.SupportedSinumerikLanguages. ;
+
+                for (int i = 0; i < SinuLang.Length; i++)
+                {
+                    if (SinuLang[i] == ToLang)
+                    {
+                        ToLang = MyMemLang[i].ToString();
+                        break;
+                    }
+                }
+
+                 if(ToLang != FromLang)
+                {
+                    dataGridViewMSG.Rows[addRow].Cells[1].Value = myMemoryTranslateEngine.Translate(FromLang, ToLang, (dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()));
+                }
+                else
+                {
+                    MessageBox.Show($"Translation of text:{dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()} from<{FromLang}> to <{ToLang}> is not possible ", "Same Language Selected!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
 
-        public String translate(String input, string from, string to)
-        {
-            var fromLanguage = from;
-            var toLanguage = to;
-            //var url = $"https://translate.google.com/?sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
-            var url = $"https://translate.googleapis.com/tran...{fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
-            //https://api.mymemory.translated.net/get?q=Hello%20World!&langpair=en|it;
-            
-            var webclient = new WebClient
-            {
-                Encoding = System.Text.Encoding.UTF8
-            };
-            var result = webclient.DownloadString(url);
-            try
-            {
-                result = result.Substring(4, result.IndexOf("\"", 4
-                    , StringComparison.Ordinal) - 4);
-                return result;
-            }
-            catch (Exception e1)
-            {
-                return "error";
-            }
-
-
-        }
     }
 }
