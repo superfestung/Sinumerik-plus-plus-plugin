@@ -435,7 +435,8 @@ namespace NppDemo.Forms
 
         private void Translate_Click(object sender, EventArgs e)
         {
-
+            int addRow = dataGridViewMSG.CurrentCell.RowIndex;
+            dataGridViewMSG.Rows[addRow].Cells[1].Value = translate(dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString(), "en", "de");
         }
 
         public String translate(String input, string from, string to)
@@ -444,6 +445,7 @@ namespace NppDemo.Forms
             var toLanguage = to;
             //var url = $"https://translate.google.com/?sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
             var url = $"https://translate.googleapis.com/tran...{fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(input)}";
+            //https://api.mymemory.translated.net/get?q=Hello%20World!&langpair=en|it;
             
             var webclient = new WebClient
             {
