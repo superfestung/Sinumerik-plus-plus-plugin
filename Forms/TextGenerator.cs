@@ -46,7 +46,9 @@ namespace NppDemo.Forms
 
         public TextGenerator()
         {
-            
+            CellUpdateForTriggers.newId = false;
+            CellUpdateForTriggers.newText = false;
+            CellUpdateForTriggers.newLine = false;
 
             MSGmessages = GetMessages();
             
@@ -83,9 +85,47 @@ namespace NppDemo.Forms
 
         private void UpdateSelectedLanguages()
         {
+            AddNewLines();            
+        }
+
+        private void UpdateNewLastLine()
+        {
+            int LastRowStart = dataGridViewMSG.RowCount - 1;
+            //string writeLangText = "";
+            
+            int addRow = LastRowStart;
+            if (checkedListBoxLanguage.Items.Count >1)
+            {
+                for (int j = 0; j < checkedListBoxLanguage.Items.Count; j++)
+                {
+                    if (checkedListBoxLanguage.GetItemChecked(j))
+                    {
+                        string writeLangText = checkedListBoxLanguage.Items[j].ToString();
+
+                        if ((writeLangText != settings.DefaultLanguage) &! (writeLangText.Contains("eng")))
+                        {
+                            dataGridViewMSG.Rows.Insert(addRow);
+                            dataGridViewMSG.Rows[addRow].Cells[0].Value = writeLangText;
+                            dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly = true;
+                            dataGridViewMSG.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[LastRowStart].Cells[0].Value;
+                            dataGridViewMSG.Rows[addRow].Cells[1].Value = dataGridViewMSG.Rows[LastRowStart-1].Cells[1].Value;
+                            dataGridViewMSG.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[LastRowStart].Cells[1].Value;
+                            addRow++;
+                        }
+                    }
+                }
+            }           
+                        
+        }
+
+        private void AddNewLines()
+        {
             string ThisLanguageHasChanged = "";
             int indexLangaugeAdded = 0;
 
+            //---------------------------------------
+            //Here Later Get Default Language
+            //---------------------------------------
             //Select English as default always
             if (checkedListBoxLanguage.GetItemChecked(0))
             {
@@ -136,7 +176,7 @@ namespace NppDemo.Forms
 
                     //Language has been added
                     if ((numLanguagesSelected > numLanguagesSelectedOld) && (numLanguagesSelected > 0))
-                    {                        
+                    {
                         //Pre Check if Language might already exists
                         int preCheckLanguage = 0;
                         if (numRowMax > numLanguagesSelected)
@@ -167,7 +207,7 @@ namespace NppDemo.Forms
                                 {
                                     getTextCounter++;
                                     if (getTextCounter == numLanguagesSelected + 1)
-                                    {                                        
+                                    {
                                         writeLangText = checkedListBoxLanguage.Items[getText].ToString();
                                     }
 
@@ -176,7 +216,7 @@ namespace NppDemo.Forms
                             writeLangText = checkedListBoxLanguage.Items[indexLangaugeAdded].ToString();
                             writeLangText = ThisLanguageHasChanged;
                             int Rowcounter = 0;
-                            while ( Rowcounter <= (numRowMax - numLanguagesSelected))
+                            while (Rowcounter <= (numRowMax - numLanguagesSelected))
                             {
                                 int addRow = Rowcounter + numLanguagesSelected;
 
@@ -189,9 +229,9 @@ namespace NppDemo.Forms
                                 dataGridViewMSG.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[Rowcounter].Cells[1].Value;
 
                                 numRowMax = dataGridViewMSG.RowCount - 1;
-                                Rowcounter = Rowcounter + numLanguagesSelected+1; 
+                                Rowcounter = Rowcounter + numLanguagesSelected + 1;
                             }
-                           
+
 
                         }
 
@@ -213,11 +253,10 @@ namespace NppDemo.Forms
                 }
             }
 
-            
+
             numLanguagesSelectedOld = numLanguagesSelected;
         }
 
-       
 
         private List<MessagesList> GetMessages()
         {
@@ -467,5 +506,74 @@ namespace NppDemo.Forms
             }
         }
 
+        private void UpdateNewLastLine(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            CellUpdateForTriggers.newLine = true;
+            if ((CellUpdateForTriggers.newId) && (CellUpdateForTriggers.newText) && (CellUpdateForTriggers.newLine))
+            {
+                CellUpdateForTriggers.newId = false;
+                CellUpdateForTriggers.newText = false;
+                CellUpdateForTriggers.newLine = false;
+                UpdateNewLastLine();
+            }
+        }
+
+        private void dataGridViewMSG_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if(dataGridViewMSG.RowCount >=2)
+            {
+                if ((dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].ReadOnly == false) && (dataGridViewMSG.CurrentCell.RowIndex == dataGridViewMSG.RowCount - 2))
+                {
+                    if (dataGridViewMSG.CurrentCell.ColumnIndex == 0)
+                    {
+                        CellUpdateForTriggers.newId = true;
+                    }
+                    if (dataGridViewMSG.CurrentCell.ColumnIndex == 1)
+                    {
+                        CellUpdateForTriggers.newText = true;
+                    }
+                }
+                if ((CellUpdateForTriggers.newId) && (CellUpdateForTriggers.newText) && (CellUpdateForTriggers.newLine))
+                {
+                    CellUpdateForTriggers.newId = false;
+                    CellUpdateForTriggers.newText = false;
+                    CellUpdateForTriggers.newLine = false;
+                    UpdateNewLastLine();
+                }
+            }
+           
+            
+            
+        }
+
+        private void dataGridViewMSG_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if ((CellUpdateForTriggers.newId) && (CellUpdateForTriggers.newText) && (CellUpdateForTriggers.newLine))
+            {
+                CellUpdateForTriggers.newId = false;
+                CellUpdateForTriggers.newText = false;
+                CellUpdateForTriggers.newLine = false;
+                UpdateNewLastLine();
+            }
+        }
+
+        private void dataGridViewMSG_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            CellUpdateForTriggers.newLine = true;
+            if ((CellUpdateForTriggers.newId) && (CellUpdateForTriggers.newText) && (CellUpdateForTriggers.newLine))
+            {
+                CellUpdateForTriggers.newId = false;
+                CellUpdateForTriggers.newText = false;
+                CellUpdateForTriggers.newLine = false;
+                UpdateNewLastLine();
+            }
+        }
+    }
+
+    class CellUpdateForTriggers
+    {
+        public static bool newLine;
+        public static bool newId;
+        public static bool newText;
     }
 }

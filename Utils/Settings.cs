@@ -28,9 +28,7 @@ namespace NppDemo.Utils
             Category("Miscellaneous"), DefaultValue("ash")]
         public string toolbar_icons { get; set; }
 
-        [Description("Automatically close HTML/XML tags when the current file extension is \"html\" or \"xml\"?"), 
-            Category("Miscellaneous"), DefaultValue(false)]
-        public bool auto_search_active_tag { get; set; }
+        
         #endregion
 
         #region STYLING
@@ -39,11 +37,21 @@ namespace NppDemo.Utils
         public bool use_npp_styling { get; set; }
         #endregion
         #region SinumerikPPProject
-        [Description("Settings for Sinumerik++ Projects. Root Folder and more to follow"),
-            Category("Sinumerik++ Project"), DefaultValue("")]
-        //Category("Sinumerik++ Project"), DefaultValue(NppDemo.Forms.TextGenerator.SinumerikProjectFolder)]
-        //Category("Sinumerik++ Project"), DefaultValue(nppdeemo.TextGenerator.textBoxProjectFolder.Text)]
+        [Description("Settings for Sinumerik++ Projects Root Folder."),
+            Category("Sinumerik++ Project"), DefaultValue("")]        
         public string SinPPRootFolder { get; set; }
+
+        [Description("Translate all on clicking the Translate Button"),
+            Category("Sinumerik++ Project"), DefaultValue(false)]
+        public bool TranslateAll { get; set; }
+
+        [Description("Default working Language for Sinumerik Projects"),
+            Category("Sinumerik++ Project"), DefaultValue("eng")]
+        public string DefaultLanguage { get; set; }
+        [Description("Automatically on Double Clicking on Search Keywords in the Sinumerik Online Help"),
+            Category("Sinumerik++ Project"), DefaultValue(false)]
+        public bool auto_search_active_tag { get; set; }
+
         #endregion
 
         /*
