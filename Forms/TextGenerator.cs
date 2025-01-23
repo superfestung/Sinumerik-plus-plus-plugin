@@ -307,7 +307,7 @@ namespace NppDemo.Forms
 
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button_ProjectPath(object sender, EventArgs e)
         {
              
             
@@ -344,49 +344,81 @@ namespace NppDemo.Forms
                 }
                 else
                 {
+                    strLanguage = settings.DefaultLanguage;
                     strLanguage = "eng";
                 }
             }
-                
-
-            switch (tabControlSinumerik.SelectedTab.Name)
-            {
-                case "PLCAlarmText":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "oem_alarms_plc_" + strLanguage + ".ts";
-                    break;
-                case "CycleAlarms":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "oem_alarms_cycles_" + strLanguage + ".ts";
-                    break;
-                case "Messages":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "oem_partprogram_messages_" + strLanguage + ".ts";
-                    break;
-                case "RunMyScreen":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "aluc_" + strLanguage + ".txt";
-                    break;
-                case "EasyXML":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "oem_aggregate_" + strLanguage + ".ts";
-                    break;
-                case "ToolManagement":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "sltmlistdialog_" + strLanguage + ".ts";
-                    break;
-                case "MaintenancePlanner":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "oem_maintenance_" + strLanguage + ".ts";
-                    break;
-                case "UserMachineData":
-                    textBoxSourceFileFolder.Text = "/card/oem/sinumerik/hmi/lng/";
-                    textBoxSourceFile.Text = "user_machine_data_" + strLanguage + ".ts";
-                    break;
-            }
+            
+            textBoxSourceFile.Text = GetTextFileNames(strLanguage);
+            textBoxSourceFileFolder.Text = GetTextFolderNames();
 
         }
 
+        private string GetTextFileNames(string strLanguage)
+        {
+            string ReturnTxt = "";
+            switch (tabControlSinumerik.SelectedTab.Name)
+            {
+                case "PLCAlarmText":
+                    ReturnTxt =  "oem_alarms_plc_" + strLanguage + ".ts";
+                    break;
+                case "CycleAlarms":
+                    ReturnTxt = "oem_alarms_cycles_" + strLanguage + ".ts";
+                    break;
+                case "Messages":
+                    ReturnTxt = "oem_partprogram_messages_" + strLanguage + ".ts";
+                    break;
+                case "RunMyScreen":
+                    ReturnTxt = "aluc_" + strLanguage + ".txt";
+                    break;
+                case "EasyXML":
+                    ReturnTxt = "oem_aggregate_" + strLanguage + ".ts";
+                    break;
+                case "ToolManagement":
+                    ReturnTxt = "sltmlistdialog_" + strLanguage + ".ts";
+                    break;
+                case "MaintenancePlanner":
+                    ReturnTxt = "oem_maintenance_" + strLanguage + ".ts";
+                    break;
+                case "UserMachineData":
+                    ReturnTxt = "user_machine_data_" + strLanguage + ".ts";
+                    break;
+            }
+            return ReturnTxt;
+        }
+
+        private string GetTextFolderNames()
+        {
+            string ReturnTxt = "";
+            switch (tabControlSinumerik.SelectedTab.Name)
+            {
+                case "PLCAlarmText":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/"; 
+                    break;
+                case "CycleAlarms":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "Messages":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "RunMyScreen":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "EasyXML":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "ToolManagement":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "MaintenancePlanner":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+                case "UserMachineData":
+                    ReturnTxt = "/card/oem/sinumerik/hmi/lng/";
+                    break;
+            }
+            return ReturnTxt;
+        }
 
 
         private void textBoxProjectFolder_TextChanged(object sender, EventArgs e)
@@ -423,37 +455,55 @@ namespace NppDemo.Forms
             }
             else
             {
-                string outputfile = SinumerikProjectFolder + "/" + textBoxSourceFile.Text;
-                //MessageBox.Show($"I write xml here: {outputfile}","Here is the Output", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                for (int i =0; i<=checkedListBoxLanguage.CheckedItems.Count;i++)
+                {
+                    if(checkedListBoxLanguage.GetItemChecked(i))
+                    {
+                        
+                        string writeLangText = checkedListBoxLanguage.Items[i].ToString();
+               
+                        string outputfile = SinumerikProjectFolder + "/" + GetTextFileNames(writeLangText);
+                        //MessageBox.Show($"I write xml here: {outputfile}","Here is the Output", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
 
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                //settings.IndentChars = ("   ");
-                settings.OmitXmlDeclaration = true;
-                //settings.ConformanceLevel = ConformanceLevel.Fragment;
-                settings.NewLineOnAttributes = true;
+                        XmlWriterSettings XMLsettings = new XmlWriterSettings();
+                        XMLsettings.Indent = true;
+                        //settings.IndentChars = ("   ");
+                        XMLsettings.OmitXmlDeclaration = true;
+                        //settings.ConformanceLevel = ConformanceLevel.Fragment;
+                        XMLsettings.NewLineOnAttributes = true;
 
 
-                int numRowMax = dataGridViewMSG.RowCount - 1;
+                        int numRowMax = dataGridViewMSG.RowCount - 1;
 
-                using (XmlWriter writer = XmlWriter.Create(outputfile,settings))                  
-                {
-                    writer.WriteDocType("TS",null,null,null);
-                    writer.WriteStartElement("TS");
-                    writer.WriteStartElement("context");
-                    writer.WriteElementString("name", "partprogmsg01");
-
-                    foreach (DataGridViewRow row in dataGridViewMSG.Rows)
-                    {
-                        if (row.Cells[0].RowIndex < dataGridViewMSG.RowCount-1)
+                        using (XmlWriter writer = XmlWriter.Create(outputfile,XMLsettings))                  
                         {
-                            writer.WriteStartElement("message");
-                            writer.WriteElementString("source", row.Cells[0].Value.ToString());
-                            writer.WriteElementString("translation", row.Cells[1].Value.ToString());
-                            writer.WriteEndElement();
-                        }
+                            writer.WriteDocType("TS",null,null,null);
+                            writer.WriteStartElement("TS");
+                            writer.WriteStartElement("context");
+                            writer.WriteElementString("name", "partprogmsg01");
+                            string memIdAsTxt = "";
+                            foreach (DataGridViewRow row in dataGridViewMSG.Rows)
+                            {
+                                if ((row.Cells[0].ReadOnly==false) && (row.Cells[0].RowIndex < dataGridViewMSG.RowCount - 1))
+                                {
+                                    memIdAsTxt = row.Cells[0].Value.ToString();
+                                }
+                                //if (((row.Cells[0].RowIndex < dataGridViewMSG.RowCount-1) && (writeLangText == row.Cells[0].Value.ToString())) ||(row.Cells[0].RowIndex < dataGridViewMSG.RowCount - 1) && (writeLangText == settings.DefaultLanguage) && (row.Cells[0].ReadOnly == false))
+                                if(row.Cells[0].RowIndex < dataGridViewMSG.RowCount - 1)
+                                {
+                                    if ((writeLangText == row.Cells[0].Value.ToString()) || ((row.Cells[0].ReadOnly == false) && (writeLangText == settings.DefaultLanguage)))
+                                    {
+                                        writer.WriteStartElement("message");
+                                        writer.WriteElementString("source", memIdAsTxt);
+                                        writer.WriteElementString("translation", row.Cells[1].Value.ToString());
+                                        writer.WriteEndElement();
+                                    }
+                                }
+                                
 
+                            }
+                        }
                     }
                 }
             }

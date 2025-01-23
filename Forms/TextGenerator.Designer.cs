@@ -186,7 +186,7 @@
             // 
             this.checkedListBoxLanguage.FormattingEnabled = true;
             this.checkedListBoxLanguage.Items.AddRange(new object[] {
-            "eng(default)",
+            "eng",
             "deu",
             "esp",
             "fra",
@@ -294,7 +294,7 @@
             this.button1.TabIndex = 12;
             this.button1.Text = "...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.button_ProjectPath);
             // 
             // textBoxProjectFolder
             // 
