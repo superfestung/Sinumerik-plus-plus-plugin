@@ -90,7 +90,8 @@ namespace NppDemo.Forms
 
         private void UpdateNewLastLine()
         {
-            int LastRowStart = dataGridViewMSG.RowCount - 1;
+            DataGridView ActualDataGrid = ReturnActualDataGrid();
+            int LastRowStart = ActualDataGrid.RowCount - 1;
             //string writeLangText = "";
             
             int addRow = LastRowStart;
@@ -104,12 +105,12 @@ namespace NppDemo.Forms
 
                         if ((writeLangText != settings.DefaultLanguage) &! (writeLangText.Contains("eng")))
                         {
-                            dataGridViewMSG.Rows.Insert(addRow);
-                            dataGridViewMSG.Rows[addRow].Cells[0].Value = writeLangText;
-                            dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly = true;
-                            dataGridViewMSG.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[LastRowStart].Cells[0].Value;
-                            dataGridViewMSG.Rows[addRow].Cells[1].Value = dataGridViewMSG.Rows[LastRowStart-1].Cells[1].Value;
-                            dataGridViewMSG.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[LastRowStart].Cells[1].Value;
+                            ActualDataGrid.Rows.Insert(addRow);
+                            ActualDataGrid.Rows[addRow].Cells[0].Value = writeLangText;
+                            ActualDataGrid.Rows[addRow].Cells[0].ReadOnly = true;
+                            ActualDataGrid.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + ActualDataGrid.Columns[0].Name + ": " + ActualDataGrid.Rows[LastRowStart].Cells[0].Value;
+                            ActualDataGrid.Rows[addRow].Cells[1].Value = ActualDataGrid.Rows[LastRowStart-1].Cells[1].Value;
+                            ActualDataGrid.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + ActualDataGrid.Columns[1].Name + ": " + ActualDataGrid.Rows[LastRowStart].Cells[1].Value;
                             addRow++;
                         }
                     }
@@ -122,7 +123,7 @@ namespace NppDemo.Forms
         {
             string ThisLanguageHasChanged = "";
             int indexLangaugeAdded = 0;
-
+            DataGridView ActualDataGrid = ReturnActualDataGrid();
             //---------------------------------------
             //Here Later Get Default Language
             //---------------------------------------
@@ -165,14 +166,14 @@ namespace NppDemo.Forms
                 //Check Language and add a additional Line for each selected Language
                 //MSG Section
                 //------------------------------------------------------------------------------------------------
-                if (tabControlSinumerik.SelectedTab.Name == "Messages")
-                {
+                //if (tabControlSinumerik.SelectedTab.Name == "Messages")
+                //{
                     //numLanguagesSelected = checkedListBoxLanguage.Items.Count;
                     numLanguagesSelected = checkedListBoxLanguage.CheckedItems.Count;
 
                     //minus 1 for default language English
                     numLanguagesSelected = numLanguagesSelected - 1;
-                    int numRowMax = dataGridViewMSG.RowCount - 1;
+                    int numRowMax = ActualDataGrid.RowCount - 1;
 
                     //Language has been added
                     if ((numLanguagesSelected > numLanguagesSelectedOld) && (numLanguagesSelected > 0))
@@ -190,7 +191,7 @@ namespace NppDemo.Forms
                         bool skipAddLanguage = false;
                         for (int i = 0; i < preCheckLanguage; i++)
                         {
-                            string ThisRowsValue = dataGridViewMSG.Rows[i].Cells[0].Value.ToString();
+                            string ThisRowsValue = ActualDataGrid.Rows[i].Cells[0].Value.ToString();
                             if (ThisLanguageHasChanged == ThisRowsValue)
                             {
                                 skipAddLanguage = true;
@@ -220,15 +221,15 @@ namespace NppDemo.Forms
                             {
                                 int addRow = Rowcounter + numLanguagesSelected;
 
-                                dataGridViewMSG.Rows.Insert(addRow);
+                                ActualDataGrid.Rows.Insert(addRow);
 
-                                dataGridViewMSG.Rows[addRow].Cells[0].Value = writeLangText;
-                                dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly = true;
-                                dataGridViewMSG.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + dataGridViewMSG.Columns[0].Name + ": " + dataGridViewMSG.Rows[Rowcounter].Cells[0].Value;
-                                dataGridViewMSG.Rows[addRow].Cells[1].Value = dataGridViewMSG.Rows[Rowcounter].Cells[1].Value;
-                                dataGridViewMSG.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + dataGridViewMSG.Columns[1].Name + ": " + dataGridViewMSG.Rows[Rowcounter].Cells[1].Value;
+                                ActualDataGrid.Rows[addRow].Cells[0].Value = writeLangText;
+                                ActualDataGrid.Rows[addRow].Cells[0].ReadOnly = true;
+                                ActualDataGrid.Rows[addRow].Cells[0].ToolTipText = "Translation in (" + writeLangText + ") for " + ActualDataGrid.Columns[0].Name + ": " + ActualDataGrid.Rows[Rowcounter].Cells[0].Value;
+                                ActualDataGrid.Rows[addRow].Cells[1].Value = ActualDataGrid.Rows[Rowcounter].Cells[1].Value;
+                                ActualDataGrid.Rows[addRow].Cells[1].ToolTipText = "Translation in (" + writeLangText + ")  for " + ActualDataGrid.Columns[1].Name + ": " + ActualDataGrid.Rows[Rowcounter].Cells[1].Value;
 
-                                numRowMax = dataGridViewMSG.RowCount - 1;
+                                numRowMax = ActualDataGrid.RowCount - 1;
                                 Rowcounter = Rowcounter + numLanguagesSelected + 1;
                             }
 
@@ -242,15 +243,15 @@ namespace NppDemo.Forms
                         //dataGridViewMSG.Rows[0].Cells[0].Selected = true;
                         for (int intRows = numRowMax - 1; intRows > 0; intRows--)
                         {
-                            string CheckForDeleteRow = dataGridViewMSG.Rows[intRows].Cells[0].Value.ToString();
+                            string CheckForDeleteRow = ActualDataGrid.Rows[intRows].Cells[0].Value.ToString();
 
                             if (CheckForDeleteRow == ThisLanguageHasChanged)
                             {
-                                dataGridViewMSG.Rows.RemoveAt(intRows);
+                                ActualDataGrid.Rows.RemoveAt(intRows);
                             }
                         }
                     }
-                }
+               // }
             }
 
 
@@ -272,16 +273,37 @@ namespace NppDemo.Forms
  
         private void MSGList_Initialize()
         {
-
+            // Data Grid for Part Program Messages MSG
             dataGridViewMSG.ColumnCount = 2;
             dataGridViewMSG.RowCount = 2;
             dataGridViewMSG.Columns[0].Name = "Message ID";
             dataGridViewMSG.Columns[0].Width= 120;
             dataGridViewMSG.Columns[1].Name = "MSG Text";
             dataGridViewMSG.Columns[1].Width = 400;
-
             //dataGridViewMSG.DataSource = MSGmessages;
             dataGridViewMSG.AllowUserToAddRows = true;
+
+            // Data Grid for Cycle Alarms SETAL            
+            dataGridViewSetal.ColumnCount = 2;
+            dataGridViewSetal.RowCount = 2;
+            dataGridViewSetal.Columns[0].Name = "Cycle Alarm ID";
+            dataGridViewSetal.Columns[0].Width = 120;
+            dataGridViewSetal.Columns[1].Name = "Cycle Alarm Text";
+            dataGridViewSetal.Columns[1].Width = 400;
+            //dataGridViewMSG.DataSource = MSGmessages;
+            dataGridViewSetal.AllowUserToAddRows = true;
+        }
+
+        private void SetupDataGridView()
+        {
+             dataGridViewSetal.ColumnCount = 2;
+            dataGridViewSetal.RowCount = 2;
+            dataGridViewSetal.Columns[0].Name = "Alarm ID";
+            dataGridViewSetal.Columns[0].Width = 120;
+            dataGridViewSetal.Columns[1].Name = "Alarm Text";
+            dataGridViewSetal.Columns[1].Width = 400;
+            //dataGridViewMSG.DataSource = MSGmessages;
+            dataGridViewSetal.AllowUserToAddRows = true;
         }
 
 
@@ -335,12 +357,13 @@ namespace NppDemo.Forms
         }
         private void UpdateFoldersAndFiles()
         {
+            DataGridView ActualDataGrid = ReturnActualDataGrid();
             string strLanguage = "eng";
             if (tabControlSinumerik.SelectedTab.Name == "Messages")
             {
-                if (dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].ReadOnly)
+                if (ActualDataGrid.Rows[ActualDataGrid.CurrentCell.RowIndex].Cells[0].ReadOnly)
                 {
-                    strLanguage = dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].Value.ToString();
+                    strLanguage = ActualDataGrid.Rows[ActualDataGrid.CurrentCell.RowIndex].Cells[0].Value.ToString();
                 }
                 else
                 {
@@ -443,7 +466,44 @@ namespace NppDemo.Forms
 
         private void writeTextfile_Click(object sender, EventArgs e)
         {
-            CreateOutputFile();
+            //CreateOutputFile();
+            CreateOutputFilewithParam(ReturnActualDataGrid());
+        }
+
+        private DataGridView ReturnActualDataGrid()
+        {
+            DataGridView ActualDataGridView;
+            switch (tabControlSinumerik.SelectedTab.Name)
+            {
+                case "PLCAlarmText":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "CycleAlarms":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "Messages":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "RunMyScreen":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "EasyXML":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "ToolManagement":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "MaintenancePlanner":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                case "UserMachineData":
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+                default:
+                    ActualDataGridView = dataGridViewMSG;
+                    break;
+            }
+            return ActualDataGridView;
         }
 
         private void CreateOutputFile()
@@ -509,6 +569,67 @@ namespace NppDemo.Forms
             }
         }
 
+        private void CreateOutputFilewithParam(DataGridView  datagrid)
+        {
+            if (SinumerikProjectFolder == "")
+            {
+                MessageBox.Show("Create a Sinumerik Project First!", "Project is Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            else
+            {
+                for (int i = 0; i <= checkedListBoxLanguage.CheckedItems.Count; i++)
+                {
+                    if (checkedListBoxLanguage.GetItemChecked(i))
+                    {
+
+                        string writeLangText = checkedListBoxLanguage.Items[i].ToString();
+
+                        string outputfile = SinumerikProjectFolder + "/" + GetTextFileNames(writeLangText);
+                        //MessageBox.Show($"I write xml here: {outputfile}","Here is the Output", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+                        XmlWriterSettings XMLsettings = new XmlWriterSettings();
+                        XMLsettings.Indent = true;
+                        //settings.IndentChars = ("   ");
+                        XMLsettings.OmitXmlDeclaration = true;
+                        //settings.ConformanceLevel = ConformanceLevel.Fragment;
+                        XMLsettings.NewLineOnAttributes = true;
+
+
+                        int numRowMax = datagrid.RowCount - 1;
+
+                        using (XmlWriter writer = XmlWriter.Create(outputfile, XMLsettings))
+                        {
+                            writer.WriteDocType("TS", null, null, null);
+                            writer.WriteStartElement("TS");
+                            writer.WriteStartElement("context");
+                            writer.WriteElementString("name", "partprogmsg01");
+                            string memIdAsTxt = "";
+                            foreach (DataGridViewRow row in datagrid.Rows)
+                            {
+                                if ((row.Cells[0].ReadOnly == false) && (row.Cells[0].RowIndex < datagrid.RowCount - 1))
+                                {
+                                    memIdAsTxt = row.Cells[0].Value.ToString();
+                                }
+                                //if (((row.Cells[0].RowIndex < dataGridViewMSG.RowCount-1) && (writeLangText == row.Cells[0].Value.ToString())) ||(row.Cells[0].RowIndex < dataGridViewMSG.RowCount - 1) && (writeLangText == settings.DefaultLanguage) && (row.Cells[0].ReadOnly == false))
+                                if (row.Cells[0].RowIndex < datagrid.RowCount - 1)
+                                {
+                                    if ((writeLangText == row.Cells[0].Value.ToString()) || ((row.Cells[0].ReadOnly == false) && (writeLangText == settings.DefaultLanguage)))
+                                    {
+                                        writer.WriteStartElement("message");
+                                        writer.WriteElementString("source", memIdAsTxt);
+                                        writer.WriteElementString("translation", row.Cells[1].Value.ToString());
+                                        writer.WriteEndElement();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void SourceCode_Click(object sender, EventArgs e)
         {
             string outputfile = SinumerikProjectFolder + "/" + textBoxSourceFile.Text;
@@ -520,20 +641,21 @@ namespace NppDemo.Forms
        
         private void Translate_Click(object sender, EventArgs e)
         {
+            DataGridView ActualDataGrid = ReturnActualDataGrid();
             string[] SinuLang = { "chs", "cht", "csy", "dan", "nld", "eng", "fin", "fra", "deu", "hun", "ind", "ita", "jpn", "kor", "msl", "plk", "ptb", "rom", "rus", "sky", "slv", "esp", "sve", "tha", "trk", "vit" };
 
             string[] MyMemLang = { "zh-CHS", "zh-CHT", "cs", "da", "nl", "en", "fi", "fr", "de", "hu", "id", "it", "ja", "ko", "ms", "pl", "pt", "ro", "ru", "sk", "sl", "es", "sv", "th", "tr", "vi" };
 
-            int addRow = dataGridViewMSG.CurrentCell.RowIndex;
+            int addRow = ActualDataGrid.CurrentCell.RowIndex;
             //dataGridViewMSG.Rows[addRow].Cells[1].Value = TranslateMyMem( "en", "de", (dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()));
 
             string FromLang = "en";
             string ToLang = "en";
 
             MyMemoryTranslateEngine myMemoryTranslateEngine = new MyMemoryTranslateEngine();
-            if (dataGridViewMSG.Rows[addRow].Cells[0].ReadOnly)
+            if (ActualDataGrid.Rows[addRow].Cells[0].ReadOnly)
             {
-                ToLang = dataGridViewMSG.Rows[addRow].Cells[0].Value.ToString();
+                ToLang = ActualDataGrid.Rows[addRow].Cells[0].Value.ToString();
                 //myMemoryTranslateEngine.SupportedSinumerikLanguages. ;
 
                 for (int i = 0; i < SinuLang.Length; i++)
@@ -547,11 +669,11 @@ namespace NppDemo.Forms
 
                  if(ToLang != FromLang)
                 {
-                    dataGridViewMSG.Rows[addRow].Cells[1].Value = myMemoryTranslateEngine.Translate(FromLang, ToLang, (dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()));
+                    ActualDataGrid.Rows[addRow].Cells[1].Value = myMemoryTranslateEngine.Translate(FromLang, ToLang, (ActualDataGrid.Rows[addRow].Cells[1].Value.ToString()));
                 }
                 else
                 {
-                    MessageBox.Show($"Translation of text:{dataGridViewMSG.Rows[addRow].Cells[1].Value.ToString()} from<{FromLang}> to <{ToLang}> is not possible ", "Same Language Selected!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Translation of text:{ActualDataGrid.Rows[addRow].Cells[1].Value.ToString()} from<{FromLang}> to <{ToLang}> is not possible ", "Same Language Selected!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -570,15 +692,16 @@ namespace NppDemo.Forms
 
         private void dataGridViewMSG_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if(dataGridViewMSG.RowCount >=2)
+            DataGridView ActualDataGrid = ReturnActualDataGrid();
+            if (ActualDataGrid.RowCount >=2)
             {
-                if ((dataGridViewMSG.Rows[dataGridViewMSG.CurrentCell.RowIndex].Cells[0].ReadOnly == false) && (dataGridViewMSG.CurrentCell.RowIndex == dataGridViewMSG.RowCount - 2))
+                if ((ActualDataGrid.Rows[ActualDataGrid.CurrentCell.RowIndex].Cells[0].ReadOnly == false) && (ActualDataGrid.CurrentCell.RowIndex == ActualDataGrid.RowCount - 2))
                 {
-                    if (dataGridViewMSG.CurrentCell.ColumnIndex == 0)
+                    if (ActualDataGrid.CurrentCell.ColumnIndex == 0)
                     {
                         CellUpdateForTriggers.newId = true;
                     }
-                    if (dataGridViewMSG.CurrentCell.ColumnIndex == 1)
+                    if (ActualDataGrid.CurrentCell.ColumnIndex == 1)
                     {
                         CellUpdateForTriggers.newText = true;
                     }

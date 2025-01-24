@@ -55,9 +55,12 @@
             this.folderBrowserDialogSinumerikProject = new System.Windows.Forms.FolderBrowserDialog();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.dataGridViewSetal = new System.Windows.Forms.DataGridView();
             this.tabControlSinumerik.SuspendLayout();
+            this.CycleAlarms.SuspendLayout();
             this.Messages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMSG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSetal)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControlSinumerik
@@ -94,6 +97,7 @@
             // 
             // CycleAlarms
             // 
+            this.CycleAlarms.Controls.Add(this.dataGridViewSetal);
             this.CycleAlarms.Location = new System.Drawing.Point(4, 25);
             this.CycleAlarms.Margin = new System.Windows.Forms.Padding(4);
             this.CycleAlarms.Name = "CycleAlarms";
@@ -375,6 +379,18 @@
             this.textBox1.Size = new System.Drawing.Size(421, 22);
             this.textBox1.TabIndex = 20;
             // 
+            // dataGridViewSetal
+            // 
+            this.dataGridViewSetal.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewSetal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSetal.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewSetal.Name = "dataGridViewSetal";
+            this.dataGridViewSetal.RowTemplate.Height = 24;
+            this.dataGridViewSetal.Size = new System.Drawing.Size(1083, 725);
+            this.dataGridViewSetal.TabIndex = 0;
+            // 
             // TextGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -401,8 +417,10 @@
             this.Name = "TextGenerator";
             this.Text = "TextGenerator";
             this.tabControlSinumerik.ResumeLayout(false);
+            this.CycleAlarms.ResumeLayout(false);
             this.Messages.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMSG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSetal)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -437,5 +455,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TabPage PLCAlarmText;
+        private System.Windows.Forms.DataGridView dataGridViewSetal;
     }
 }
